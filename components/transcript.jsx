@@ -5,6 +5,15 @@ import DeleteIcon from './delete'
 
 import classes from './transcript.module.css'
 
+import { getFirestore, doc, setDoc, getDoc, collection, updateDoc, arrayUnion } from 'firebase/firestore';
+
+import { app } from '../firebaseConfig'; // Importing the Firebase app instance
+
+const db = getFirestore(app);
+
+
+
+
 const formatNumber = (n) => n < 10 ? '0' + n : n
 
 const formatDateTime = (s) => {
@@ -34,6 +43,7 @@ export default function Transcript({
     data = '',
     onClick = undefined,
     onDelete = undefined,
+    transcript = undefined,
 }) {
 
     let items = []
@@ -41,6 +51,7 @@ export default function Transcript({
     let flag = false
 
     const tokens = data.split("\n")
+
     for (let i = 0; i < tokens.length; i++) {
         const s = tokens[i].trim()
         if(s.indexOf(':') > 0 && s.indexOf('-->') > 0) {
@@ -53,6 +64,41 @@ export default function Transcript({
         }
     }
 
+    let atext = "";
+    console.log(items);
+        for (let i = 0; i < items.length; i++) {
+            atext += items[i].text;
+        }
+
+
+        const addCarlaMessage = async (text, userEmail) => {
+            const userDocRef = doc(db, "users", userEmail);
+            
+            // Check if the user's folder exists
+            const userDocSnapshot = await getDoc(userDocRef);
+            
+            if (!userDocSnapshot.exists()) {
+                // If the folder doesn't exist, create it
+                await setDoc(userDocRef, { /* Add any initial data you need here */ });
+            }
+            
+            const newMessage = {
+                sender: "User",
+                message: text,
+                time: new Date().toISOString(),
+                via: 'text'
+            };
+        
+            // Add the message to the user's chat
+            await updateDoc(userDocRef, {
+                "chat-1": arrayUnion(newMessage)
+            });
+        };
+        
+
+
+
+
     const handleDelete = (e) => {
         e.stopPropagation()
         e.preventDefault()
@@ -64,9 +110,9 @@ export default function Transcript({
     return (
         <div className={classes.container} onClick={onClick}>
             <div className={classes.top}>
-                <div className={classes.datetime}>{ formatDateTime(datetime) }</div>
+                {/* <div className={classes.datetime}>{ formatDateTime(datetime) }</div> */}
                 <div onClick={handleDelete} className={classes.iconButton}>
-                    <DeleteIcon color="#fff" />
+                    <DeleteIcon color="black" />
                 </div>
             </div>
             <div className={classes.list}>
@@ -74,8 +120,8 @@ export default function Transcript({
                 items.map((item, index) => {
                     return (
                         <div key={index} className={classes.item}>
-                            <div className={classes.timestamp}>{ item.timestamp }</div>
-                            <div className={classes.text}>{ item.text }</div>
+                   {/* <div className={classes.timestamp}>{ item.timestamp }</div> */}
+                            <div className={classes.text}>{ transcript }</div>
                         </div>
                     )
                 })

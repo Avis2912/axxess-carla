@@ -1,13 +1,39 @@
 .container {
-    background-color: #fff;
+    background-color: #b98758;
     position: relative;
+    height: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    align-items: center;
+
+}
+
+.pic {
+    height: 40px;
+    width: 40px;
+    transition: all 0.5s ease-in;
+
+}
+
+.input {
+    height: 50px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-color: transparent;
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 18px;
+    font-family: serif;
+    /* color: #b98758; */
+
 }
 
 .center {
     position: relative;
-    height: 130px;
+    height: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: end;
     align-items: center;
 }
 
@@ -22,7 +48,7 @@
 
 .item {
     /*border-right: 1px solid rgba(0, 0, 0, 0.125);*/
-    width: 50%;
+    /* width: 50%; */
     height: 100%;
     display: flex;
     justify-content: center;
@@ -33,11 +59,16 @@
 }
 
 .iconPanel, .iconButton, .disabledButton {
-    /*background-color: #e6e6e6;*/
-    width: calc(2rem + 5px);
-    height: calc(2rem + 5px);
-    padding: 5px;
+    /* background-color: #ae7c7c; */
+    width: calc(100%);
+    height: calc(100%);
+    padding: 0px;
     border-radius: 50%;
+    padding-left: 12px;
+    padding-top: 20px;
+    justify-content: center;
+    align-items: center;
+
 }
 
 .iconButton {

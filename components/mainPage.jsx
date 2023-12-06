@@ -13,7 +13,15 @@ import SnackBar from './snackbar'
 import AudioModal from './audiomodal'
 import Modal from './modal'
 
+import { getFirestore, doc, setDoc, collection, updateDoc, arrayUnion } from 'firebase/firestore';
+
+import { app } from '../firebaseConfig'; // Importing the Firebase app instance
+
+const db = getFirestore(app);
+
+
 import Transcript from './transcript'
+import Response from './response'
 
 import { useAppStore } from '../stores/appStore'
 import { useAppData } from '../stores/appData'
@@ -39,7 +47,7 @@ export default function MainPage() {
 
     const abortControllerRef = React.useRef()
 
-    const [transcripts, setTranscripts] = React.useState([])
+    
     const [sendCount, setSendCount] = React.useState(0)
 
     const startRef = React.useRef(startStates.default)
@@ -65,6 +73,11 @@ export default function MainPage() {
     const [openModal, setOpenModal] = React.useState(false)
 
     const [isMounted, setMounted] = React.useState(false)
+
+    const [transcripts, setTranscripts] = React.useState([])
+    const [transcripts2, setTranscripts2] = React.useState([])
+    const [responses, setResponses] = React.useState([])
+    const [response, setResponse] = React.useState("")
     
 
     React.useEffect(() => {
@@ -148,6 +161,85 @@ export default function MainPage() {
         console.log(error)
         setErrorMessage('Error calling getUserMedia')
     }
+
+    const handleTextInput = async (text) => {
+
+        const x = {
+
+            data: `WEBVTT\n\n00:00:00.000 --> 00:00:03.200\n${text}\n\n`,
+            datetime: "2023-12-04T06:46:19.378Z",
+            filename: "file170167238287714627.webm",
+            onClick: undefined,
+            onDelete: undefined,
+        }
+
+        
+        addDataItems(x);
+        console.log('okokok');
+
+
+        const addCarlaMessage = async (text, userEmail) => {
+            const userDocRef = doc(db, "users", userEmail);
+            
+            // Check if the user's folder exists
+            const userDocSnapshot = await getDoc(userDocRef);
+            
+            if (!userDocSnapshot.exists()) {
+                // If the folder doesn't exist, create it
+                await setDoc(userDocRef, { /* Add any initial data you need here */ });
+            }
+            
+            const newMessage = {
+                sender: "User",
+                message: text,
+                time: new Date().toISOString(),
+                via: 'text'
+            };
+        
+            // Add the message to the user's chat
+            await updateDoc(userDocRef, {
+                "chat-1": arrayUnion(newMessage)
+            });
+
+
+            addCarlaMessage(text, "avirox4@gmail.com")
+        };
+        
+
+
+
+
+
+        // addChatMessage(x);
+        
+        // const modifiedText = text + "\nRespond in two lines.";
+    
+        // const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `Bearer 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` // Use your actual API key
+        //     },
+        //     body: JSON.stringify({
+        //         model: "gpt-3.5-turbo",
+        //         messages: [{ "role": "system", "content": "You are a helpful assistant." },
+        //                    { "role": "user", "content": modifiedText }]
+        //     })
+        // });
+    
+        // if (!response.ok) {
+        //     console.error('API request failed:', response.statusText);
+        //     return;
+        // }
+    
+        // const data = await response.json();
+        // if (data.choices && data.choices.length > 0) {
+        //     // Here, you can decide how to use the GPT response
+        //     console.log(data.choices[0].message.content); // For example, log it or set it to state
+        // } else {
+        //     console.error('Invalid response structure:', data);
+        // }
+    };
 
     const handleStream = (stream) => {
 
@@ -451,6 +543,20 @@ export default function MainPage() {
 
     }
 
+    const handleResponse = async (text) => {
+        await setResponse(text);
+ 
+    }
+
+    const handleResponses = async (text) => {
+        await setResponses(text);
+    }
+
+    const handleTranscripts = async (text) => {
+        setTranscripts2(text);
+    }
+
+
     return (
         <div className={classes.container}>
             <div ref={listRef} className={classes.main}>
@@ -470,14 +576,24 @@ export default function MainPage() {
                 (isMounted && isReady && transcripts.length > 0) &&
                 <div className={classes.list}>
                     {
-                        transcripts.map((item) => {
+                        transcripts.map((item, index) => {
                             return (
+                                <>
                                 <Transcript
                                 key={item.filename}
                                 {...item}
-                                onClick={() => handleClickTranscript(item.filename)}
+                                transcript={transcripts2[index] ? transcripts2[index] : 'Loading in...'}
+                                // onClick={() => handleClickTranscript(item.filename)}
                                 onDelete={handleDelete}
                                 />
+                                <Response
+                                key={item.filename}
+                                {...item}
+                                response={responses[index] ? responses[index] : 'Clara is Thinking...'}
+                                // onClick={() => handleClickTranscript(item.filename)}
+                                onDelete={handleDelete}
+                                />
+                                </>
                             )
                         })
                     }
@@ -491,8 +607,12 @@ export default function MainPage() {
                 isRecording={isRecording}
                 disabled={!isReady}
                 disabledSetting={!isReady || startState === startStates.active}
-                onStartClick={handleStart}
+                onMicClick={handleStart}
+                onInput={handleTextInput}
                 onSettingsClick={handleOpenSettings}
+                onResponse={handleResponse}
+                onResponses={handleResponses}
+                onTranscripts={handleTranscripts}
                 />
             </div>
             {
