@@ -46,54 +46,57 @@ export default function Transcript({
     transcript = undefined,
 }) {
 
-    let items = []
-    let index = -1
-    let flag = false
-
-    const tokens = data.split("\n")
-
-    for (let i = 0; i < tokens.length; i++) {
-        const s = tokens[i].trim()
-        if(s.indexOf(':') > 0 && s.indexOf('-->') > 0) {
-            index++
-            items.push({ timestamp: s, text: '' })
-            flag = true
-        } else if(flag) {
-            items[index].text = s
-            flag = false
-        }
-    }
-
-    let atext = "";
-    console.log(items);
-        for (let i = 0; i < items.length; i++) {
-            atext += items[i].text;
-        }
+    let items = [12]
 
 
-        const addCarlaMessage = async (text, userEmail) => {
-            const userDocRef = doc(db, "users", userEmail);
+    // let items = []
+    // let index = -1
+    // let flag = false
+
+    // const tokens = data.split("\n")
+
+    // for (let i = 0; i < tokens.length; i++) {
+    //     const s = tokens[i].trim()
+    //     if(s.indexOf(':') > 0 && s.indexOf('-->') > 0) {
+    //         index++
+    //         items.push({ timestamp: s, text: '' })
+    //         flag = true
+    //     } else if(flag) {
+    //         items[index].text = s
+    //         flag = false
+    //     }
+    // }
+
+    // let atext = "";
+    // console.log(items);
+    //     for (let i = 0; i < items.length; i++) {
+    //         atext += items[i].text;
+    //     }
+
+
+    //     const addCarlaMessage = async (text, userEmail) => {
+    //         const userDocRef = doc(db, "users", userEmail);
             
-            // Check if the user's folder exists
-            const userDocSnapshot = await getDoc(userDocRef);
+    //         // Check if the user's folder exists
+    //         const userDocSnapshot = await getDoc(userDocRef);
             
-            if (!userDocSnapshot.exists()) {
-                // If the folder doesn't exist, create it
-                await setDoc(userDocRef, { /* Add any initial data you need here */ });
-            }
+    //         if (!userDocSnapshot.exists()) {
+    //             // If the folder doesn't exist, create it
+    //             await setDoc(userDocRef, { /* Add any initial data you need here */ });
+    //         }
             
-            const newMessage = {
-                sender: "User",
-                message: text,
-                time: new Date().toISOString(),
-                via: 'text'
-            };
+    //         const newMessage = {
+    //             sender: "User",
+    //             message: text,
+    //             time: new Date().toISOString(),
+    //             via: 'text'
+    //         };
         
-            // Add the message to the user's chat
-            await updateDoc(userDocRef, {
-                "chat-1": arrayUnion(newMessage)
-            });
-        };
+    //         // Add the message to the user's chat
+    //         await updateDoc(userDocRef, {
+    //             "chat-1": arrayUnion(newMessage)
+    //         });
+    //     };
         
 
 

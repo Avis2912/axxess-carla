@@ -58,6 +58,7 @@
     padding: 1.5rem 1.5rem 1.5rem 1.5rem;
     border-radius: 15px;
     margin-top: 0px;
+    transition: all 1s ease-in;
 
 
 }
@@ -86,6 +87,8 @@
     width: calc(100%);
     font-family: serif;
     color: rgb(244, 244, 244);
+    transition: opacity 0.5s ease-in; /* Add a transition for opacity */
+
 }
 
 @media only screen and (max-width: 400px) {

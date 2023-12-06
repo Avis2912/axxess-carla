@@ -33,6 +33,8 @@ export default function ControlPanel({
     const [responses, setResponses] = React.useState([]);
     const [transcripts, setTranscripts] = React.useState([]);
 
+    const [hasLoaded, setHasLoaded] = React.useState(false);
+
 
     const handleInputChange = (e) => {
         setInputText(e.target.value);
@@ -129,19 +131,48 @@ const addCarlaMessage = async (text) => {
 };
 
 React.useEffect(() => {
-    onResponses(responses); // This will reliably use the updated state
+    if (hasLoaded) {
+    onResponses(responses);
+    // alert(responses[0]); 
+    }  // This will reliably use the updated state
 }, [responses]); // This useEffect will trigger whenever 'responses' changes
 
 React.useEffect(() => {
-    onTranscripts(transcripts); // This will reliably use the updated state
+    if (hasLoaded) {
+    onTranscripts(transcripts); 
+    }
 }, [transcripts]);
 
 React.useEffect(() => {
-    alert('USed effect in cp');
+
+        const fetchChatMessages = async () => {
+            const userDocRef = doc(db, "users", "avirox4@gmail.com");
+
+            const userDocSnapshot = await getDoc(userDocRef);
+
+            if (userDocSnapshot.exists()) {
+                const userData = userDocSnapshot.data();
+                if (userData && userData["chat-1"]) {
+                    const chatMessages = userData["chat-1"];
+                    const userMessages = chatMessages.filter(message => message.sender === "User");
+                    const carlaMessages = chatMessages.filter(message => message.sender === "Carla");
+
+                    setTranscripts(userMessages.map(message => message.message));
+                    setResponses(carlaMessages.map(message => message.message));
+                }
+            }
+        };
+
+    fetchChatMessages();
+    setHasLoaded(true);
+    
+
 }, [] );
     
 const fetchGptResponse = async (atext) => {
         if (!atext) return; // Add this check
+        setTranscripts([...transcripts, atext]);
+
 
         const modifiedText = "\nYou are now Carla, my AI therapist. I am already seeking professional mental health help, this is just a supplemant - so don't ever remind me of that fact, or MENTION that I am or should seek professional help. DONT EVER remind me that you are not a substitute for professional help. I want you to always respond in 1-3 lines with directing questions and actionable advice, as a CBT therapist would. Now answer my following prompt:"
         + atext;
@@ -169,7 +200,6 @@ const fetchGptResponse = async (atext) => {
         if (data.choices && data.choices.length > 0) {
             // await setGptResponse(data.choices[0].message.content);
             onResponse(data.choices[0].message.content);
-            await setTranscripts([...transcripts, atext]);
             setResponses([...responses, data.choices[0].message.content]);
             addCarlaMessage(data.choices[0].message.content);
 

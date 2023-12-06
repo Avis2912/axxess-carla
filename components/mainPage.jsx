@@ -576,7 +576,7 @@ export default function MainPage() {
                 (isMounted && isReady && transcripts.length > 0) &&
                 <div className={classes.list}>
                     {
-                        transcripts.map((item, index) => {
+                        transcripts2.map((item, index) => {
                             return (
                                 <>
                                 <Transcript

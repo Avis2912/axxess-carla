@@ -36,114 +36,114 @@ const formatDateTime = (s) => {
 }
 
 export default function Response({
-    filename = '',
-    datetime = '',
-    data = '',
-    onClick = undefined,
-    onDelete = undefined,
+    // filename = '',
+    // datetime = '',
+    // data = '',
+    // onClick = undefined,
+    // onDelete = undefined,
     response = undefined,
 }) {
 
-    let items = [];
-    let index = -1;
-    let flag = false;
+    let items = [12];
+    // let index = -1;
+    // let flag = false;
 
-    const tokens = data.split("\n");
+    // const tokens = data.split("\n");
 
-    for (let i = 0; i < tokens.length; i++) {
-        const s = tokens[i].trim();
-        if(s.indexOf(':') > 0 && s.indexOf('-->') > 0) {
-            index++;
-            items.push({ timestamp: s, text: '' });
-            flag = true;
-        } else if(flag) {
-            items[index].text = s;
-            flag = false;
-        }
-    }
+    // for (let i = 0; i < tokens.length; i++) {
+    //     const s = tokens[i].trim();
+    //     if(s.indexOf(':') > 0 && s.indexOf('-->') > 0) {
+    //         index++;
+    //         items.push({ timestamp: s, text: '' });
+    //         flag = true;
+    //     } else if(flag) {
+    //         items[index].text = s;
+    //         flag = false;
+    //     }
+    // }
 
-    let atext = "";
-    for (let i = 0; i < items.length; i++) {
-        atext += items[i].text;
-    }
+    // let atext = "";
+    // for (let i = 0; i < items.length; i++) {
+    //     atext += items[i].text;
+    // }
     
 
-    const addCarlaMessage = async (text) => {
+    // const addCarlaMessage = async (text) => {
         
-        const userDocRef = doc(db, "users", "avirox4@gmail.com");
-        const newMessage = { 
-            sender: "Carla", 
-            message: text,
-            time: new Date().toISOString()  ,
-            via: 'text'
-        };
+    //     const userDocRef = doc(db, "users", "avirox4@gmail.com");
+    //     const newMessage = { 
+    //         sender: "Carla", 
+    //         message: text,
+    //         time: new Date().toISOString()  ,
+    //         via: 'text'
+    //     };
     
-        await updateDoc(userDocRef, {
-            "chat-1": arrayUnion(newMessage)
-        });
-    };
-    
-
-    const [gptResponse, setGptResponse] = React.useState('');
-
-    React.useEffect(() => {
-        const fetchGptResponse = async () => {
-            if (!atext) return; // Add this check
-
-            const modifiedText = atext + "\nRespond in two lines.";
-
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer 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`
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [{ "role": "system", "content": "You are a helpful assistant." },
-                               { "role": "user", "content": modifiedText }]
-                })
-            });
-    
-            if (!response.ok) {
-                // Log the error for debugging
-                console.error('API request failed: ', response.statusText);
-                return;
-            }
-    
-            const data = await response.json();
-            if (data.choices && data.choices.length > 0) {
-                await setGptResponse(data.choices[0].message.content);
-            } else {
-                console.error('Invalid response structure:', data);
-                // Handle the error appropriately
-            }
-        };
-    
-        // if (atext) {
-        //     fetchGptResponse();
-        // }
-
-    }, []);
+    //     await updateDoc(userDocRef, {
+    //         "chat-1": arrayUnion(newMessage)
+    //     });
+    // };
     
 
-    try {
-        // console.log(gptResponse);
-        // addCarlaMessage(gptResponse);
-    } catch (err) {
-        // alert(err);
-    }
-    
-    const handleDelete = (e) => {
-        e.stopPropagation()
-        e.preventDefault()
-        onDelete(filename)
-    }
+    // const [gptResponse, setGptResponse] = React.useState('');
 
-    // Multiply: &#215;
+    // React.useEffect(() => {
+    //     const fetchGptResponse = async () => {
+    //         if (!atext) return; // Add this check
+
+    //         const modifiedText = atext + "\nRespond in two lines.";
+
+    //         const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': `Bearer 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`
+    //             },
+    //             body: JSON.stringify({
+    //                 model: "gpt-3.5-turbo",
+    //                 messages: [{ "role": "system", "content": "You are a helpful assistant." },
+    //                            { "role": "user", "content": modifiedText }]
+    //             })
+    //         });
+    
+    //         if (!response.ok) {
+    //             // Log the error for debugging
+    //             console.error('API request failed: ', response.statusText);
+    //             return;
+    //         }
+    
+    //         const data = await response.json();
+    //         if (data.choices && data.choices.length > 0) {
+    //             await setGptResponse(data.choices[0].message.content);
+    //         } else {
+    //             console.error('Invalid response structure:', data);
+    //             // Handle the error appropriately
+    //         }
+    //     };
+    
+    //     // if (atext) {
+    //     //     fetchGptResponse();
+    //     // }
+
+    // }, []);
+    
+
+    // try {
+    //     // console.log(gptResponse);
+    //     // addCarlaMessage(gptResponse);
+    // } catch (err) {
+    //     // alert(err);
+    // }
+    
+    // const handleDelete = (e) => {
+    //     e.stopPropagation()
+    //     e.preventDefault()
+    //     // onDelete(filename)
+    // }
+
+    // // Multiply: &#215;
 
     return (
-        <div className={classes.container} onClick={onClick}>
+        <div className={classes.container} onClick={() => {alert('i')}}>
             <div className={classes.top}>
                 {/* <div className={classes.datetime}>{ formatDateTime(datetime) }</div>
                 <div onClick={handleDelete} className={classes.iconButton}>
