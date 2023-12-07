@@ -22,6 +22,7 @@ export default function ControlPanel({
     isSignalOn = false,
     state = startStates.default,
     onMicClick = undefined,
+    micText = undefined,
     onInput = undefined,
     onSettingsClick = undefined,
     onResponse = undefined,
@@ -34,6 +35,7 @@ export default function ControlPanel({
     const [transcripts, setTranscripts] = React.useState([]);
 
     const [hasLoaded, setHasLoaded] = React.useState(false);
+    const [micMessage, setMicMessage] = React.useState("");
 
 
     const handleInputChange = (e) => {
@@ -42,19 +44,6 @@ export default function ControlPanel({
 
     const handleTextInput = async (text) => {
         // alert('this');
-
-        const x = {
-
-            data: `WEBVTT\n\n00:00:00.000 --> 00:00:03.200\n${text}\n\n`,
-            datetime: "2023-12-04T06:46:19.378Z",
-            filename: "file170167238287714627.webm",
-            onClick: undefined,
-            onDelete: undefined,
-        }
-
-        
-        // addDataItems(x);
-
 
         const addUserMessage = async (text, userEmail) => {
 
@@ -96,10 +85,20 @@ export default function ControlPanel({
 
     };
 
+    const handleMicEnter = async (mic="false") => {
+
+        await onInput(micText);
+        await handleTextInput(micText);
+        await setMicMessage('');
+    };
+
+    
+
     const handleInputEnter = async (e) => {
+ 
         if (e.key === 'Enter' && inputText.trim() !== '') {
             await onInput(inputText); 
-            await handleTextInput(inputText);
+            await handleTextInput(inputText); //adds message to firebase
             await setInputText('');
         }
     };
@@ -142,6 +141,13 @@ React.useEffect(() => {
     onTranscripts(transcripts); 
     }
 }, [transcripts]);
+
+React.useEffect(() => {
+    if (hasLoaded) {
+    setMicMessage(micText);
+    handleMicEnter(true);
+    }
+}, [micText]);
 
 React.useEffect(() => {
 
@@ -210,18 +216,6 @@ const fetchGptResponse = async (atext) => {
     };
 
  
-
-// try {
-//     console.log(gptResponse);
-//     addCarlaMessage(gptResponse);
-// } catch (err) {
-//     alert(err);
-// }
-
-
-
-
-
 
 
 

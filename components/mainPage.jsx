@@ -78,6 +78,8 @@ export default function MainPage() {
     const [transcripts2, setTranscripts2] = React.useState([])
     const [responses, setResponses] = React.useState([])
     const [response, setResponse] = React.useState("")
+    const [micMessage, setMicMessage] = React.useState("")
+
     
 
     React.useEffect(() => {
@@ -162,7 +164,7 @@ export default function MainPage() {
         setErrorMessage('Error calling getUserMedia')
     }
 
-    const handleTextInput = async (text) => {
+    const handleTextInput = async (text, item="") => {
 
         const x = {
 
@@ -178,67 +180,6 @@ export default function MainPage() {
         console.log('okokok');
 
 
-        const addCarlaMessage = async (text, userEmail) => {
-            const userDocRef = doc(db, "users", userEmail);
-            
-            // Check if the user's folder exists
-            const userDocSnapshot = await getDoc(userDocRef);
-            
-            if (!userDocSnapshot.exists()) {
-                // If the folder doesn't exist, create it
-                await setDoc(userDocRef, { /* Add any initial data you need here */ });
-            }
-            
-            const newMessage = {
-                sender: "User",
-                message: text,
-                time: new Date().toISOString(),
-                via: 'text'
-            };
-        
-            // Add the message to the user's chat
-            await updateDoc(userDocRef, {
-                "chat-1": arrayUnion(newMessage)
-            });
-
-
-            addCarlaMessage(text, "avirox4@gmail.com")
-        };
-        
-
-
-
-
-
-        // addChatMessage(x);
-        
-        // const modifiedText = text + "\nRespond in two lines.";
-    
-        // const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer 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` // Use your actual API key
-        //     },
-        //     body: JSON.stringify({
-        //         model: "gpt-3.5-turbo",
-        //         messages: [{ "role": "system", "content": "You are a helpful assistant." },
-        //                    { "role": "user", "content": modifiedText }]
-        //     })
-        // });
-    
-        // if (!response.ok) {
-        //     console.error('API request failed:', response.statusText);
-        //     return;
-        // }
-    
-        // const data = await response.json();
-        // if (data.choices && data.choices.length > 0) {
-        //     // Here, you can decide how to use the GPT response
-        //     console.log(data.choices[0].message.content); // For example, log it or set it to state
-        // } else {
-        //     console.error('Invalid response structure:', data);
-        // }
     };
 
     const handleStream = (stream) => {
@@ -443,6 +384,7 @@ export default function MainPage() {
              * verify if result does not contain any useful data, disregard
              */
             const data = result?.data
+
             if(data) {
 
                 /**
@@ -451,7 +393,35 @@ export default function MainPage() {
                  */
                 if(data.indexOf(':') > 0 && data.indexOf("-->") > 0) {
 
-                    addDataItems(result)
+
+                    let items = []
+                    let index = -1
+                    let flag = false
+
+                    const tokens = data.split("\n")
+
+                    for (let i = 0; i < tokens.length; i++) {
+                    const s = tokens[i].trim()
+                    if(s.indexOf(':') > 0 && s.indexOf('-->') > 0) {
+                        index++
+                        items.push({ timestamp: s, text: '' })
+                        flag = true
+                    } else if(flag) {
+                        items[index].text = s
+                        flag = false
+                    }
+                    }
+
+                    let atext = "";
+                    console.log(items);
+
+                    for (let i = 0; i < items.length; i++) {
+                        atext += items[i].text;
+                    }
+
+                    setMicMessage(atext);
+                    // addDataItems(result);
+
 
                 }
 
@@ -608,6 +578,7 @@ export default function MainPage() {
                 disabled={!isReady}
                 disabledSetting={!isReady || startState === startStates.active}
                 onMicClick={handleStart}
+                micText={micMessage}
                 onInput={handleTextInput}
                 onSettingsClick={handleOpenSettings}
                 onResponse={handleResponse}

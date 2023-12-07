@@ -46,7 +46,7 @@ export default function Transcript({
     transcript = undefined,
 }) {
 
-    let items = [12]
+    let items = [1]
 
 
     // let items = []
