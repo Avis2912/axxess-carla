@@ -5,6 +5,10 @@ import SettingsIcon from './settings'
 import SignalIcon from './signal'
 
 import StartButton, { startStates } from './startbutton'
+import StartButton2 from './startbutton2'
+import StopButton from './stopbutton'
+
+
 
 import { getFirestore, doc, setDoc, getDoc, collection, updateDoc, arrayUnion } from 'firebase/firestore';
 
@@ -36,6 +40,7 @@ export default function ControlPanel({
 
     const [hasLoaded, setHasLoaded] = React.useState(false);
     const [micMessage, setMicMessage] = React.useState("");
+    const [showPopup, setShowPopup] = React.useState(false);
 
 
     const handleInputChange = (e) => {
@@ -174,7 +179,7 @@ React.useEffect(() => {
     
 
 }, [] );
-    
+
 const fetchGptResponse = async (atext) => {
         if (!atext) return; // Add this check
         setTranscripts([...transcripts, atext]);
@@ -216,16 +221,38 @@ const fetchGptResponse = async (atext) => {
     };
 
  
-
-
-
-
-
-
+    const callPopup = () => {
+        setShowPopup(!showPopup);
+    };
 
 
     return (
+        <>
+        <div
+        className={`${showPopup ? classes.popup : classes.popupClose}`}
+        >  
+            <StartButton2
+        disabled={disabled}
+        isRecording={isRecording}
+        state={state}
+        showPopup={!showPopup} 
+        onClick={disabled ? () => {} : onMicClick}
+        />
+        
+        <StopButton
+        disabled={disabled}
+        isRecording={isRecording}
+        state={state}
+        showPopup={!showPopup} 
+        onClick={callPopup}
+        />
+          </div>
+
+
+
+
         <div className={classes.container}>
+
             <div className={classes.center}>
             
             <input 
@@ -234,15 +261,20 @@ const fetchGptResponse = async (atext) => {
             value={inputText}
             onChange={handleInputChange}
             onKeyDown={handleInputEnter}
+            style={{ opacity: showPopup && '0'}}  // Conditionally set the width
+
             />
 
                 <StartButton 
                 disabled={disabled}
                 isRecording={isRecording}
                 state={state}
-                onClick={disabled ? () => {} : onMicClick}
+                onClick={callPopup}
+                showPopup={showPopup}  // Conditionally set the width
+                // onClick={disabled ? () => {} : onMicClick}
                 />
 
+               
                 <div className={classes.item}>
                     {
                         disabledSetting &&
@@ -268,6 +300,7 @@ const fetchGptResponse = async (atext) => {
                
             </div>
         </div>
+        </>
     )
 }
 

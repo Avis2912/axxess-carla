@@ -10,7 +10,7 @@ import PauseIcon from './pause2'
 
 import AnimatedBars from './animatedBars'
 
-import classes from './startbutton.module.css'
+import classes from './stopbutton.module.css'
 
 const colorTypes = {
     default: '#666666',
@@ -27,7 +27,7 @@ export const startStates = {
     active: 'active',
 }
 
-function StartButton({ 
+function StopButton({ 
     disabled = false,
     isRecording = false,
     state = startStates.default, 
@@ -49,7 +49,7 @@ function StartButton({
             <div className={classes.center}>
                 <div className={classes.icon} >
                     {
-                        disabled ? <MicrophoneOffIcon className={classes.disabledColor} /> : <MicrophoneIcon className={classIcon} />
+                        // disabled ? <MicrophoneOffIcon className={classes.disabledColor} /> : <MicrophoneIcon className={classIcon} />
                     }
                 </div>
                 {
@@ -63,7 +63,7 @@ function StartButton({
     )
 }
 
-StartButton.propTypes = {
+StopButton.propTypes = {
     /**
      * Disabled property
      */
@@ -82,4 +82,4 @@ StartButton.propTypes = {
     onClick: PropTypes.func,
 }
 
-export default StartButton
+export default StopButton

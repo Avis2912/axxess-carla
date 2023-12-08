@@ -26,6 +26,7 @@
     font-size: 18px;
     font-family: serif;
     /* color: #b98758; */
+    transition: all 1.5s ease-in;
 
 }
 
@@ -78,3 +79,58 @@
 .iconButton:hover {
     background-color: #f5f5f5;
 }
+
+@keyframes enlargeCircle {
+    from {
+        transform: scale(0);
+        bottom: -100%;
+    }
+    to {
+        transform: scale(1);
+        bottom: 0;
+    }
+}
+
+.popup {
+    position: fixed;
+    bottom: 0;  
+    left: 50%;
+    transform: translateX(-50%); 
+    /* transform: translateY(-100%); */
+    width: 400vh;
+    height: 150vh;
+    border-radius: 50%;
+    animation-fill-mode: forwards;
+    background-color: #b98758;
+    z-index: 1000;  
+    opacity: 1;
+    /* pointer-events: none; */
+    transition: all 1.5s ease-in;
+
+    display: flex;
+    flex-direction: column; /* Align children vertically */
+    align-items: center;
+    justify-content: center;
+
+    
+}
+
+.popupClose {
+    position: fixed;
+    bottom: 0;  
+    left: -0%;
+    transform: translateX(0%);
+    transform: translateY(100%);
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background-color: #b98758;
+    animation-fill-mode: forwards;
+    z-index: 0;  
+    opacity: 1;
+    pointer-events: none;
+    transition: all 0.8s ease-in;
+
+    
+}
+
