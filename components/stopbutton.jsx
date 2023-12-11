@@ -8,6 +8,10 @@ import PlayIcon from './play'
 import ArrowIcon from './arrow'
 import PauseIcon from './pause2'
 
+import { Icon } from '@iconify/react';
+import chatBubble from '@iconify-icons/ion/chatbubble';
+
+
 import AnimatedBars from './animatedBars'
 
 import classes from './stopbutton.module.css'
@@ -44,22 +48,39 @@ function StopButton({
     let classIcon = state === startStates.default ? classes.defaultColor : classes.activateColor
 
     return (
-        <div  onClick={disabled ? () => {} : onClick} className={classContainer}                
+        <>
+        <div className={classes.holder}>
+        <button  onClick={disabled ? () => {} : onClick} className={classContainer}                
          style={{ opacity: showPopup && '0'}} >
             <div className={classes.center}>
                 <div className={classes.icon} >
                     {
                         // disabled ? <MicrophoneOffIcon className={classes.disabledColor} /> : <MicrophoneIcon className={classIcon} />
                     }
+
+            <Icon icon={chatBubble} width={24} height={24} />
+
                 </div>
-                {
+                
+               
+                {/* {
                     (!disabled && state === startStates.active ) &&
                     <div className={classes.bars}>
                         <AnimatedBars start={isRecording} />
                     </div>
-                }
+                } */}
             </div>
-        </div>
+        </button>
+
+        <img src="https://i.ibb.co/GQL1GbL/Screenshot-2023-12-05-at-4-01-21-PM-removebg-preview.png" 
+        alt="C" className={classes.carla} style={{ opacity: showPopup && '0'}}></img>   
+
+      </div>
+
+         <div className={classes.tap} style={{opacity: showPopup && '0'}}>
+         Tap Anywhere
+         </div>
+         </>
     )
 }
 

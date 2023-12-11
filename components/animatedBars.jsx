@@ -17,7 +17,7 @@ export default function AnimatedBars(props) {
                 })
             }, 100)
         } else {
-            setBars(Array(8).fill(1))
+            setBars(Array(18).fill(1))
         }
 
         return () => {

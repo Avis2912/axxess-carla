@@ -1,26 +1,46 @@
 .container {
-    position: relative;
-    min-width: 100px;
-    min-height: 100px;
-    max-width: 100px;
-    max-height: 100px;
-    border-radius: 50%;
+    position: absolute;
+    min-width: 100vw;
+    min-height: 200vh;
+    border-radius: 50px;
     margin-inline: 0%;
-    margin-top: 119vh;
+    /* margin-top: 119vh; */
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
     border-width: 0px; /* this the one */
     border-style: solid;
+    opacity: 1;
     cursor: pointer;
     overflow: hidden;
-    transition: all 1.5s ease-in 1.5s;
+    transition: all 0.25s ease-in;
+    background-color: transparent;
+}
+
+.container2 {
+    position: absolute;
+    min-width: 100vw;
+    min-height: 200vh;
+    border-radius: 50px;
+    margin-inline: 0%;
+    /* margin-top: 119vh; */
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-width: 0px; /* this the one */
+    border-style: solid;
+    opacity: 0.6;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.25s ease-in;
     background-color: #fbe1c9;
 
-
-
 }
+
+
+
 .center {
     position: relative;
     display: flex;
@@ -39,6 +59,8 @@
     overflow: hidden;
     color: white;
 }
+
+
 
 .disabled {
     border-color: #e0e0e099;
@@ -75,4 +97,15 @@
         fill: #ffffff;
     }
     
+}
+
+.panelOpen {
+    transition: all 1.5s ease-in 1.5s;
+    /* Other styles for the open state */
+}
+
+/* Transition without delay for closing */
+.panelClose {
+    transition: all 1.5s ease-in;
+    /* Other styles for the closed state */
 }

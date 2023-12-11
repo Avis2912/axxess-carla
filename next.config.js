@@ -16,7 +16,7 @@ const nextConfig = {
     return config
   },
   env: {
-    siteTitle: 'Whisper API Sample App',
+    siteTitle: 'Carla Web',
   },
   async headers() {
     return [
@@ -29,7 +29,7 @@ const nextConfig = {
   serverRuntimeConfig: {
     PROJECT_ROOT: __dirname,
   },
-  trailingSlash: true,
+  trailingSlash: false,
   experimental: {
     appDir: true,
   },

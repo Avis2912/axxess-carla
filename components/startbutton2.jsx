@@ -41,15 +41,31 @@ function StartButton({
         classContainer = [classes.container, classes.disabled].join(' ')
     }
 
+    let classContainer2 = state === startStates.default ? [classes.container2, classes.default].join(' ') : [classes.container2, classes.activate].join(' ')
+    if(disabled) {
+        classContainer2 = [classes.container2, classes.disabled].join(' ')
+    }
+
     let classIcon = state === startStates.default ? classes.defaultColor : classes.activateColor
+    
+    const [isPanelOpen, setIsPanelOpen] = React.useState(false);
+
+    // Function to toggle panel state
+    const togglePanel = () => {
+        setIsPanelOpen(!isPanelOpen);
+    };
+
+    // Determine the class to apply based on the panel state
+    const panelClass = isPanelOpen ? 'panelOpen' : 'panelClose';
+
 
     return (
-        <div  onClick={disabled ? () => {} : onClick} className={classContainer}                
-         style={{ opacity: showPopup && '0'}} >
+        <div  onClick={disabled ? () => {} : onClick} className={isRecording ? classContainer2 : classContainer}                
+         style={{ backgroundColor: showPopup && 'transparent', opacity: !showPopup && 1}} >
             <div className={classes.center}>
                 <div className={classes.icon} >
                     {
-                        disabled ? <MicrophoneOffIcon className={classes.disabledColor} /> : <MicrophoneIcon className={classIcon} />
+                        // disabled ? <MicrophoneOffIcon className={classes.disabledColor} /> : <MicrophoneIcon className={classIcon} />
                     }
                 </div>
                 {

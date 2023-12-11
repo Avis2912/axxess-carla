@@ -8,7 +8,14 @@ import StartButton, { startStates } from './startbutton'
 import StartButton2 from './startbutton2'
 import StopButton from './stopbutton'
 
+const axios = require('axios');
 
+
+// import { exec } from "child_process";
+// import fs from "fs";
+// import readline from "readline";
+// import queue from "queue";
+import dotenv from "dotenv";
 
 import { getFirestore, doc, setDoc, getDoc, collection, updateDoc, arrayUnion } from 'firebase/firestore';
 
@@ -16,8 +23,29 @@ import { app } from '../firebaseConfig'; // Importing the Firebase app instance
 
 const db = getFirestore(app);
 
-
 import classes from './controlPanel.module.css'
+
+dotenv.config();
+
+// Define folders to store screenshots and audio files, create them if they don't exist.
+// const screenshotsDir = "./screenshots";
+const audioDir = "./audio";
+// const filePrefix = "screenshot";
+const audioOutputPrefix = "audio";
+
+// if (!fs.existsSync(screenshotsDir)) {
+//   fs.mkdirSync(screenshotsDir, { recursive: true });
+// }
+// if (!fs.existsSync(audioDir)) {
+//   fs.mkdirSync(audioDir, { recursive: true });
+// }
+
+// // Set up a readline interface so the user can trigger the AI actions in the terminal
+// const rl = readline.createInterface({
+//   input: process.stdin,
+//   output: process.stdout,
+// });
+
 
 export default function ControlPanel({
     disabled = false,
@@ -41,11 +69,27 @@ export default function ControlPanel({
     const [hasLoaded, setHasLoaded] = React.useState(false);
     const [micMessage, setMicMessage] = React.useState("");
     const [showPopup, setShowPopup] = React.useState(false);
-
+    const [conversationHistory, setConversationHistory] = React.useState([]);
+    
+    const [audioURL, setAudioURL] = React.useState(null); // State to store the audio URL
+    const [audioSrc, setAudioSrc] = React.useState(null);
 
     const handleInputChange = (e) => {
         setInputText(e.target.value);
     };
+
+    const handleNewInteraction = (newPrompt, newResponse) => {
+        // Add new prompt and response to history
+        const updatedHistory = [...conversationHistory, { prompt: newPrompt, response: newResponse }];
+
+        // Keep only the last 5 interactions
+        if (updatedHistory.length > 5) {
+            updatedHistory.shift(); // Remove the oldest interaction
+        }
+
+        setConversationHistory(updatedHistory);
+    };
+
 
     const handleTextInput = async (text) => {
         // alert('this');
@@ -71,7 +115,7 @@ export default function ControlPanel({
             }
             
             const newMessage = {
-                sender: "User",
+                sender: "USER",
                 message: text,
                 time: reversedFormattedTime,
                 via: 'text'
@@ -122,7 +166,7 @@ const addCarlaMessage = async (text) => {
         
     const userDocRef = doc(db, "users", "avirox4@gmail.com");
     const newMessage = { 
-        sender: "Carla", 
+        sender: "CARLA", 
         message: text,
         time: reversedFormattedTime,
         via: 'text'
@@ -142,7 +186,10 @@ React.useEffect(() => {
 }, [responses]); // This useEffect will trigger whenever 'responses' changes
 
 React.useEffect(() => {
+    console.log('transcripts');
+    console.log(transcripts);
     if (hasLoaded) {
+        console.log(transcripts);
     onTranscripts(transcripts); 
     }
 }, [transcripts]);
@@ -156,24 +203,31 @@ React.useEffect(() => {
 
 React.useEffect(() => {
 
-        const fetchChatMessages = async () => {
+    const fetchChatMessages = async () => {
+        try {
             const userDocRef = doc(db, "users", "avirox4@gmail.com");
-
+    
             const userDocSnapshot = await getDoc(userDocRef);
-
+    
             if (userDocSnapshot.exists()) {
                 const userData = userDocSnapshot.data();
                 if (userData && userData["chat-1"]) {
                     const chatMessages = userData["chat-1"];
-                    const userMessages = chatMessages.filter(message => message.sender === "User");
-                    const carlaMessages = chatMessages.filter(message => message.sender === "Carla");
-
+                    const userMessages = chatMessages.filter(message => message.sender === "USER");
+                    const carlaMessages = chatMessages.filter(message => message.sender === "CARLA");
+    
                     setTranscripts(userMessages.map(message => message.message));
                     setResponses(carlaMessages.map(message => message.message));
                 }
-            }
-        };
+            } else {alert('User Not Found. Please Login Again!')}
 
+        } catch (error) {
+            // Handle errors here
+            console.error("Error fetching chat messages:", error);
+            // You can add additional error handling logic here, such as displaying an error message to the user.
+        }
+    };
+    
     fetchChatMessages();
     setHasLoaded(true);
     
@@ -184,9 +238,12 @@ const fetchGptResponse = async (atext) => {
         if (!atext) return; // Add this check
         setTranscripts([...transcripts, atext]);
 
-
-        const modifiedText = "\nYou are now Carla, my AI therapist. I am already seeking professional mental health help, this is just a supplemant - so don't ever remind me of that fact, or MENTION that I am or should seek professional help. DONT EVER remind me that you are not a substitute for professional help. I want you to always respond in 1-3 lines with directing questions and actionable advice, as a CBT therapist would. Now answer my following prompt:"
+        const modifiedText = ""
         + atext;
+
+        const context = conversationHistory.map(({ prompt, response }) => {
+            return { role: 'user', content: prompt }, { role: 'assistant', content: response };
+        }).flat();
 
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -196,8 +253,11 @@ const fetchGptResponse = async (atext) => {
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: [{ "role": "system", "content": "You are a helpful assistant." },
-                           { "role": "user", "content": modifiedText }]
+                messages: [{ "role": "system", "content": "You're Carla, my AI therapist. dont EVER mention professional help. ALWAYS respond briefly in 10-20 words w/ questions and sometimes ONE actionable tip like CBT. Don't act like a robot & repeat question/problem back to me. Talk like a 10 year old." },
+                ...context,
+                { "role": "user", "content": modifiedText }],
+                temperature: 1 // Setting maximum temperature
+
             })
         });
 
@@ -213,6 +273,7 @@ const fetchGptResponse = async (atext) => {
             onResponse(data.choices[0].message.content);
             setResponses([...responses, data.choices[0].message.content]);
             addCarlaMessage(data.choices[0].message.content);
+            handleNewInteraction(modifiedText, data.choices[0].message.content);
 
         } else {
             console.error('Invalid response structure:', data);
@@ -223,6 +284,71 @@ const fetchGptResponse = async (atext) => {
  
     const callPopup = () => {
         setShowPopup(!showPopup);
+    };
+
+    const handleTextToSpeech = async (text, outputPathPrefix) => {
+        
+        try {
+            const response = await fetch('/api/textToSpeech', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text, outputPathPrefix })
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            const audioPath = data.audioPath; // Path received from the server
+            setAudioSrc(audioPath); // Update the state with the new audio path
+        } catch (error) {
+            console.error("Error:", error);
+        }
+
+
+        // // Configure the OpenAI TTS (text to speech) API Calls
+        // const url = "https://api.openai.com/v1/audio/speech";
+        // const headers = {
+        //     Authorization: `Bearer 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`,
+        //     "Content-Type": "application/json",
+        // };
+
+        // // params
+        // const data = {
+        //     model: "tts-1-hd",
+        //     input: text, // This is what the Vision API responded with
+        //     voice: "nova", // This is the pre-selected voice, can be changed
+        //     response_format: "mp3",
+        // };
+
+        // // Make call to the TTS API
+        // try {
+        //     const response = await axios.post(url, data, {
+        //     headers: headers,
+        //     responseType: "arraybuffer",
+        //     });
+
+        //     // Set up an audioBuffer and store the TTS response as a uniquely named MP3 file
+        //     const audioBuffer = Buffer.from(response.data, "binary");
+        //     const timestamp = new Date().toISOString().replace(/:/g, "-");
+        //     const audioFilename = `${outputPathPrefix}_${timestamp}.mp3`;
+        //     const audioPath = `${audioDir}/${audioFilename}`;
+        //     fs.writeFileSync(audioPath, audioBuffer);
+
+        //     // Add the newly created mp3 to a queue
+        //     return audioPlaybackQueue.push(function (cb) {
+        //     console.log(`\n${inputText}\n`);
+        //     playAudio(audioPath)
+        //         .then(() => cb())
+        //         .catch((error) => {
+        //         console.error("Error in audio playback:", error);
+        //         cb();
+        //         });
+        //     });
+        // } catch (error) {
+        //     console.error("Error in streamedAudio:", error.message);
+        // }
     };
 
 
@@ -238,7 +364,20 @@ const fetchGptResponse = async (atext) => {
         showPopup={!showPopup} 
         onClick={disabled ? () => {} : onMicClick}
         />
-        
+
+        {/* <img src="https://i.ibb.co/GQL1GbL/Screenshot-2023-12-05-at-4-01-21-PM-removebg-preview.png" 
+        alt="C" className={classes.carla}></img>   
+         */}
+
+            <button
+                // onClick={() => handleTextToSpeech("Hello world! Hello world! Hello world! Hello world!", audioOutputPrefix)}
+            >
+                Generate Audio
+            </button>
+            {audioSrc && <audio src={audioSrc} controls />}
+
+
+
         <StopButton
         disabled={disabled}
         isRecording={isRecording}
