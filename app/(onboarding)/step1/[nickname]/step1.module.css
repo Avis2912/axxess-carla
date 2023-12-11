@@ -33,13 +33,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     font-family: serif;
     font-size: 32px;
     font-weight: 600;
     opacity: 0.8;
 
-    line-height: 1.1; /* Adjust this value as needed */
-    margin-bottom: 13px;
+    line-height: 1.05; /* Adjust this value as needed */
+    margin-bottom: 35px;
     letter-spacing: -0.4px; 
 
 
