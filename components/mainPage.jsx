@@ -558,7 +558,7 @@ export default function MainPage() {
             {
                 (isMounted && isReady && transcripts.length === 0) &&
                 <div className={classes.mainError}>
-                    <span className={classes.info}>No transcripts</span>
+                    <span className={classes.info}>Carla Says Hi!</span>
                 </div>
             }
             {

@@ -19,7 +19,8 @@ import dotenv from "dotenv";
 
 import { getFirestore, doc, setDoc, getDoc, collection, updateDoc, arrayUnion } from 'firebase/firestore';
 
-import { app } from '../firebaseConfig'; // Importing the Firebase app instance
+import { app } from '../firebaseConfig';
+import { auth } from '/firebaseConfig.js';
 
 const db = getFirestore(app);
 
@@ -128,7 +129,7 @@ export default function ControlPanel({
 
 
         };
-        addUserMessage(text, "avirox4@gmail.com")
+        addUserMessage(text, auth?.currentUser?.email)
         fetchGptResponse(text);
 
 
@@ -164,7 +165,7 @@ const addCarlaMessage = async (text) => {
 
 
         
-    const userDocRef = doc(db, "users", "avirox4@gmail.com");
+    const userDocRef = doc(db, "users", auth?.currentUser?.email);
     const newMessage = { 
         sender: "CARLA", 
         message: text,
@@ -204,7 +205,7 @@ React.useEffect(() => {
 
     const fetchChatMessages = async () => {
         try {
-            const userDocRef = doc(db, "users", "avirox4@gmail.com");
+            const userDocRef = doc(db, "users", auth?.currentUser?.email);
     
             const userDocSnapshot = await getDoc(userDocRef);
     
