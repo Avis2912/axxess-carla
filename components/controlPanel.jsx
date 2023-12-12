@@ -187,10 +187,9 @@ React.useEffect(() => {
 
 React.useEffect(() => {
     console.log('transcripts');
-    console.log(transcripts);
     if (hasLoaded) {
         console.log(transcripts);
-    onTranscripts(transcripts); 
+        onTranscripts(transcripts); 
     }
 }, [transcripts]);
 
