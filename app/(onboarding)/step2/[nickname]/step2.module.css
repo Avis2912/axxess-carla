@@ -40,7 +40,32 @@
     opacity: 0.8;
 
     line-height: 1.05; /* Adjust this value as needed */
-    margin-bottom: 40px;
+    margin-bottom: 35px;
+    letter-spacing: -0.4px; 
+
+
+}
+
+
+
+.text {
+
+    position: relative;
+    width: 100%;
+    height: 30px;
+    overflow: none;
+    color: rgb(119, 85, 59);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: serif;
+    font-size: 34px;
+    font-weight: 600;
+    opacity: 0.8;
+
+    line-height: 1.05; /* Adjust this value as needed */
+    margin-bottom: 6px;
     letter-spacing: -0.4px; 
 
 
@@ -64,7 +89,7 @@
     opacity: 0.8;
 
     line-height: 1.45;
-    margin-bottom: 26px;
+    margin-bottom: 16px;
     letter-spacing: -0.25px; 
     
 }
@@ -87,6 +112,27 @@
 
 }
 
+.optionButton {
+    min-height: 50px;
+    border-radius: 15px;
+    border-color: orange;
+    width: 210px;
+    /* padding-left: 20px;
+    padding-right: 15px; */
+    font-size: 18px;
+    font-family: serif;
+    justify-content: center;
+
+    background-color: rgb(249, 224, 178);
+    /* color: #b98758; */
+    text-align: center;
+    margin-bottom: 10.5px;
+    letter-spacing: -0.2px; 
+
+    
+
+}
+
 .button {
 
     min-height: 50px;
@@ -103,7 +149,64 @@
     background-color: black;
     letter-spacing: -0.25px; 
 
+    margin-top: 10px;
+}
 
+/* CSS */
+.button50 {
+  appearance: button;
+  background-color: #ffcda3;
+  background-image: none;
+  border: 0px solid #3e3e3e;
+  border-radius: 12px;
+  box-shadow: #f2a565 6px 6px 0 0,#000 0px 0px 0 0px;
+  box-sizing: border-box;
+  color: #585858;
+  cursor: pointer;
+  display: inline-block;
+  font-family: ITCAvantGardeStd-Bk,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0 5px 10px 0;
+  overflow: visible;
+  padding: 12px 40px;
+  text-align: center;
+  text-transform: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+
+  height: 55px;
+  width: 210px;
+  margin-bottom: 20px;
+}
+
+.button50:focus {
+  text-decoration: none;
+}
+
+.button50:hover {
+  text-decoration: none;
+}
+
+.button50:active {
+  box-shadow: rgba(0, 0, 0, .125) 0 3px 5px inset;
+  outline: 0;
+}
+
+.button50:not([disabled]):active {
+  /* background-color: #e79755; */
+  box-shadow: #f19e59 2px 2px 0 0, #3e3e3e 0px 0px 0 0px;
+  transform: translate(2px, 2px);
+}
+
+@media (min-width: 768px) {
+  .button50 {
+    padding: 12px 50px;
+  }
 }
 
 .carla_container {

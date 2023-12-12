@@ -1,5 +1,5 @@
-import MainPage from '../components/mainPage'
 
+import MainPage from '../components/mainPage'
 
 
 export const metadata = {
@@ -18,5 +18,8 @@ export const metadata = {
 }
 
 export default function Page(props) {
+
+   
+
     return <MainPage {...props} />;
 }

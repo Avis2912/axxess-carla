@@ -11,9 +11,13 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 import { useEffect, useState } from 'react';
 
-
+import { signOut } from 'firebase/auth';
 
 export default function signin() {
+
+    useEffect(() => {
+      console.log(auth?.currentUser?.email);
+    }, []);
 
     const router = useRouter(); 
 
@@ -23,17 +27,20 @@ export default function signin() {
 
 
     const signup = async () => {
-        // try {
-        //   await createUserWithEmailAndPassword(auth, email, password);
-        // } catch (err) {
-        //   alert(err);  
-        //   alert('Invalid entry. Password must be 6+ characters long.' );
-        //   return;
-        // }
-        router.push(`/step1/${email}`);
-      };
-    
+      // Regular expression to check for spaces and special characters except full stop
+      const isValidNickname = /^[a-zA-Z0-9.]*$/.test(email);
 
+      if (isValidNickname) {
+          router.push(`/step1/${email}`);
+          // await signOut(auth);
+          // alert('signedout')
+      } else {
+          alert('Invalid nickname. Please avoid spaces and special characters except for full stops.');
+          return;
+      }
+
+  };
+  
     return <div className={classes.container}>
 
         
@@ -59,7 +66,7 @@ export default function signin() {
     onChange={(e) => setEmail(e.target.value)} />
 
     <button className={classes.button} onClick={signup}>
-    Message Carla
+    💬 Message Carla 
     </button>
         
     </div>

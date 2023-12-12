@@ -14,7 +14,8 @@ import AudioModal from './audiomodal'
 import Modal from './modal'
 
 import { getFirestore, doc, setDoc, collection, updateDoc, arrayUnion } from 'firebase/firestore';
-
+import { useRouter } from 'next/navigation';
+import { auth } from '/firebaseConfig.js';
 import { app } from '../firebaseConfig'; // Importing the Firebase app instance
 
 const db = getFirestore(app);
@@ -27,6 +28,24 @@ import { useAppStore } from '../stores/appStore'
 import { useAppData } from '../stores/appData'
 
 export default function MainPage() {
+
+    const router = useRouter();
+    const [user, setUser] = React.useState(null); // State to store the current user
+
+
+    React.useEffect(() => {
+        // This listener is called whenever the user's sign-in state changes
+        const unsubscribe = auth.onAuthStateChanged(currentUser => {
+            if (!auth.currentUser) {
+              router.push('/landing');
+            } else {
+                setUser(null);
+            }
+        });
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
+    }, []);
+
 
     const dataCount = useAppData((state) => state.count)
     const dataItems = useAppData((state) => state.items)
