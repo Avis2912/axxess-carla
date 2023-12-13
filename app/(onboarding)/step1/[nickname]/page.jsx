@@ -66,7 +66,7 @@ export default function signin({ params }) {
         //   alert('Invalid entry. Password must be 6+ characters long.' );
           return;
         }
-        router.push(`/step2/${params.nickname}`);
+        router.push(`/step2/${email}`);
       };
     
 

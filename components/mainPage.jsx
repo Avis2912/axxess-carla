@@ -27,6 +27,9 @@ import Response from './response'
 import { useAppStore } from '../stores/appStore'
 import { useAppData } from '../stores/appData'
 
+import { checkMicrophonePermission, requestMicrophoneAccess } from './microphoneUtils';
+
+
 export default function MainPage() {
 
     const router = useRouter();
@@ -99,7 +102,6 @@ export default function MainPage() {
     const [response, setResponse] = React.useState("")
     const [micMessage, setMicMessage] = React.useState("")
 
-    
 
     React.useEffect(() => {
         
@@ -136,16 +138,6 @@ export default function MainPage() {
 
     React.useEffect(() => {
 
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-
-            navigator.mediaDevices.getUserMedia({ audio: true }).then(handleStream).catch(handleError)
-    
-        } else {
-    
-            setErrorMessage('Media devices not supported')
-            
-        }
-
         return () => {
 
             try {
@@ -158,7 +150,7 @@ export default function MainPage() {
 
         }
 
-    }, [minDecibels, maxPause,language, endpoint, temperature])
+    }, [])
 
     React.useEffect(() => {
 
@@ -178,9 +170,22 @@ export default function MainPage() {
 
     }, [isCountDown])
 
+    const getMicPermission = () => {
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(handleStream).catch(handleError)
+    
+        } else {
+    
+            setErrorMessage('Media devices not supported')
+            
+        }
+    }
+
     const handleError = (error) => {
         console.log(error)
-        setErrorMessage('Error calling getUserMedia')
+        setErrorMessage('Please Enable Your Mic!')
     }
 
     const handleTextInput = async (text, item="") => {

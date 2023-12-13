@@ -234,6 +234,21 @@ React.useEffect(() => {
 
 }, [] );
 
+const getMicPermission = () => {
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(handleStream).catch(() => {
+            alert('Mic Access Required');
+          });
+
+    } else {
+
+        alert('Your Mic Is Not Supported :(')
+        
+    }
+}
+
 const fetchGptResponse = async (atext) => {
         if (!atext) return; // Add this check
         setTranscripts([...transcripts, atext]);

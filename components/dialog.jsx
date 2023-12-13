@@ -31,7 +31,7 @@ export default function Dialog({ onClose = undefined }) {
         <div className={classes.container}>
             <div className={classes.dialog}>
                 <div className={classes.contents}>
-                    <h4 className={classes.subtitle}>Recording</h4>
+                    <h4 className={classes.subtitle}>My Plan</h4>
                     <div className={classes.item}>
                         <label className={classes.label}>MaxPause</label>
                         <select className={classes.select} value={interval} onChange={(e) => setInterval(e.target.value)}>
