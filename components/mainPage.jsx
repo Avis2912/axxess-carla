@@ -27,7 +27,7 @@ import Response from './response'
 import { useAppStore } from '../stores/appStore'
 import { useAppData } from '../stores/appData'
 
-import { checkMicrophonePermission, requestMicrophoneAccess } from './microphoneUtils';
+import { checkMicrophonePermission, requestMicrophoneAccess } from './microphonePermissionUtils';
 
 
 export default function MainPage() {
@@ -138,6 +138,18 @@ export default function MainPage() {
 
     React.useEffect(() => {
 
+        handleStream();
+
+        // if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+
+        //     navigator.mediaDevices.getUserMedia({ audio: true }).then(handleStream).catch(handleError)
+    
+        // } else {
+    
+        //     setErrorMessage('Media devices not supported')
+            
+        // }
+
         return () => {
 
             try {
@@ -169,19 +181,6 @@ export default function MainPage() {
         }
 
     }, [isCountDown])
-
-    const getMicPermission = () => {
-
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-
-            navigator.mediaDevices.getUserMedia({ audio: true }).then(handleStream).catch(handleError)
-    
-        } else {
-    
-            setErrorMessage('Media devices not supported')
-            
-        }
-    }
 
     const handleError = (error) => {
         console.log(error)
