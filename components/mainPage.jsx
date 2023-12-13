@@ -27,7 +27,7 @@ import Response from './response'
 import { useAppStore } from '../stores/appStore'
 import { useAppData } from '../stores/appData'
 
-import { checkMicrophonePermission, requestMicrophoneAccess } from './microphonePermissionUtils';
+import { checkMicrophonePermission, requestMicrophoneAccess } from './microphoneUtils';
 
 
 export default function MainPage() {
