@@ -74,7 +74,7 @@ export default function signin({ params }) {
     marginTop: '0px',}}/>
 
     <div className={classes.text} >
-    Almost There <br></br>
+    Open Book <br></br>
     
     </div>
 

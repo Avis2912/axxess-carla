@@ -124,7 +124,7 @@ export default function signin({ params }) {
 
     <div className={classes.text2} >
     Carla Will Never Ask For Your<br></br>
-    Email Or Other Personal Info
+    Email Or Other Personal Intel
     </div>
 
     <input placeholder='Your Nickname' 

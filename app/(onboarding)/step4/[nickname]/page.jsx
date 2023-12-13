@@ -35,10 +35,13 @@ export default function signin({ params }) {
     }, []);
 
     const [aboutMe, setAboutMe] = useState('');
+    const [aboutGoal, setAboutGoal] = useState('');
+    const [aboutTraits, setAboutTraits] = useState('');
+
     const [showPassword, setShowPassword] = useState(false);
 
 
-    const addAboutMe = async (userEmail, aboutMe) => {
+    const addAboutMe = async (userEmail, aboutMe, aboutGoal, aboutTraits) => {
 
       const userDocRef = doc(db, "users", userEmail);
       
@@ -49,7 +52,11 @@ export default function signin({ params }) {
           await setDoc(userDocRef, { /* Add any initial data you need here */ });
       }
 
-      const hey = aboutMe;
+      const hey = {
+        me: aboutMe,
+        goal: aboutGoal,
+        traits: aboutTraits
+    };
   
       // Add the message to the user's chat
       await updateDoc(userDocRef, {
@@ -59,11 +66,11 @@ export default function signin({ params }) {
   };
 
 
-    const isButtonDisabled = aboutMe.length < 80;  // Disable button if input length is less than 80
+    const isButtonDisabled = aboutMe.length < 10 || aboutGoal.length < 10 || aboutTraits.length < 10;  // Disable button if input length is less than 80
 
     const handleSubmit = () => {
         if (!isButtonDisabled) {
-            addAboutMe(`${params.nickname}@gmail.com`, aboutMe)
+            addAboutMe(`${params.nickname}@gmail.com`, aboutMe, aboutGoal, aboutTraits)
             router.push(`/step5/${params.nickname}`);
         }
     };
@@ -85,7 +92,7 @@ export default function signin({ params }) {
     marginBottom: '0px',}}/>
 
     <div className={classes.text} >
-    Finish Line <br></br>
+    Learning More <br></br>
     
     </div>
 
@@ -95,13 +102,24 @@ export default function signin({ params }) {
 
     <input 
     className={`${classes.input50}`}
-    placeholder="Hey Carla, I'm..."
+    placeholder="Hey Carla, I am... "
     onChange={(e) => setAboutMe(e.target.value)}
-    >
-    </input>
+    />
+
+    <input 
+    className={`${classes.input50}`}
+    placeholder="I'm using Carla to become... "
+    onChange={(e) => setAboutGoal(e.target.value)}
+    />
+
+    <input 
+    className={`${classes.input50}`}
+    placeholder="Friends would describe me as..."
+    onChange={(e) => setAboutTraits(e.target.value)}
+    />
 
     <button className={classes.button} onClick={handleSubmit} disabled={isButtonDisabled}>
-    Done
+    That's All
     </button>
 
         

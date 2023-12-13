@@ -88,7 +88,7 @@ export default function signin({ params }) {
     marginTop: '0px',}}/>
 
     <div className={classes.text} >
-    I Can Spend <br></br>
+    I Will Spend <br></br>
     
     </div>
 

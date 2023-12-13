@@ -1,5 +1,5 @@
 .container {
-    height: 100vh;
+    height: 100dvh;
     width: 100wh;
     background-color: #fbe1c9;/*fffae6*/
     display: flex;
@@ -39,7 +39,7 @@
     font-weight: 600;
     opacity: 0.8;
 
-    line-height: 1.05; /* Adjust this value as needed */
+    line-height: 1.15; /* Adjust this value as needed */
     margin-bottom: 50px;
     letter-spacing: -0.4px; 
 
@@ -124,6 +124,12 @@
     background-color: black;
     letter-spacing: -0.25px; 
 
+}
+
+.button:disabled {
+  background-color: rgb(66, 66, 66); /* Change background color to gray when disabled */
+  color: #ccc; /* Optional: Change text color for disabled state */
+  cursor: not-allowed; /* Optional: Change cursor to indicate the button is disabled */
 }
 
 /* CSS */

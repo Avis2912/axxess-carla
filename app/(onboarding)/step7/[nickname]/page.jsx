@@ -22,6 +22,7 @@ export default function signin({ params }) {
   const router = useRouter();
   const [user, setUser] = useState(null); // State to store the current user
   const [selectedOption, setSelectedOption] = useState(null);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(currentUser => {
@@ -71,7 +72,10 @@ export default function signin({ params }) {
     router.push(`/`);
   }
 
-
+  const agree = () => {
+    setSelectedOption('Agree');
+    setIsButtonDisabled(false);
+  }
 
     return <div className={classes.container}>
 
@@ -91,7 +95,7 @@ export default function signin({ params }) {
 
     <div className={classes.text} >
     Carla Is Not <br></br>
-    A Replacement
+    A Substitute
     
     </div>
 
@@ -103,11 +107,11 @@ export default function signin({ params }) {
 
     <button 
     className={`${classes.button50} ${selectedOption === 'Agree' ? classes.active : ''}`}
-    onClick={() => setSelectedOption('Agree')}
+    onClick={() => agree()}
     > I Agree
     </button>
     
-    <button className={classes.button} onClick={handleSubmit}>
+    <button className={classes.button} onClick={handleSubmit} disabled={isButtonDisabled}>
     💬 Message Carla!
     </button>
         

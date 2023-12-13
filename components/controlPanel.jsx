@@ -423,7 +423,7 @@ const fetchGptResponse = async (atext) => {
                     }
                     {
                         !disabledSetting &&
-                        <div className={disabledSetting ? classes.disabledButton : classes.iconButton} onClick={disabledSetting ? () => {} : onSettingsClick}>
+                        <div className={disabledSetting ? classes.disabledButton : classes.disabledButton} onClick={disabledSetting ? () => {} : onSettingsClick}>
                         <img src="https://i.ibb.co/GQL1GbL/Screenshot-2023-12-05-at-4-01-21-PM-removebg-preview.png" 
                         alt="C" className={classes.pic}></img>                          </div>
                     }

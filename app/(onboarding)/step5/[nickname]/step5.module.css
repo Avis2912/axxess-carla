@@ -1,11 +1,22 @@
 .container {
-    height: 100vh;
+    height: 100dvh;
     width: 100wh;
     background-color: #fbe1c9;/*fffae6*/
     display: flex;
     justify-content: center;
     
 }
+
+.input {
+  height: 100px;
+  width: 240px;
+  padding: 10px 10px;
+  overflow-x: auto;
+  white-space: normal; 
+
+
+}
+
 
 .holder {
     position: absolute;
