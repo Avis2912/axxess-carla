@@ -26,10 +26,12 @@
     padding-left: 55.5px;
     padding-right: 45px;
     font-size: 20px;
+    color: #AF8471;
     font-family: serif;
     /* color: #b98758; */
     transition: all 1.5s ease-in;
     vertical-align:middle;
+    letter-spacing: -0.5;
 
 }
 
@@ -113,7 +115,7 @@
     height: 100vh;
     /* border-radius: 50%; */
     /* animation-fill-mode: forwards; */
-    background-color: #bd9374;
+    background-color: #c6926d;
     z-index: 1000;  
     opacity: 1;
     /* pointer-events: none; */
@@ -136,7 +138,7 @@
     width: 100vw;
     height: 100vh;
     /* border-radius: 50%; */
-    background-color: #a98972;
+    background-color: #c6926d;
     animation-fill-mode: forwards;
     z-index: 0;  
     opacity: 1;

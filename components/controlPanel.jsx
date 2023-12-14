@@ -10,6 +10,7 @@ import StopButton from './stopbutton'
 import MenuButton from './menubutton'
 import Menu from './menu'
 
+import { useRouter } from 'next/navigation'
 
 
 const axios = require('axios');
@@ -237,7 +238,7 @@ const fetchChatMessages = async () => {
                 setTranscripts(userMessages.map(message => message.message));
                 setResponses(carlaMessages.map(message => message.message));
             }
-        } else {alert('User Not Found. Please Login Again!')}
+        } else {router.push('/landing')}
         }
     } catch (error) {
         // Handle errors here
