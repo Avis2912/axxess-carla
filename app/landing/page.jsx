@@ -25,7 +25,7 @@ export default function signin() {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-
+ 
     const signup = async () => {
       // Regular expression to check for spaces and special characters except full stop
       const isValidNickname = /^[a-zA-Z0-9.]*$/.test(email);
@@ -41,12 +41,16 @@ export default function signin() {
 
   };
   
-    return <div className={classes.container}>
-
+    return <div>
+      {/* <div style={{height: '200px', width: '200px', position: 'absolute', backgroundColor: 'red'}}></div> */}
+      <div className={classes.container}>
         
     <div className={classes.carla_container} />
     <img src="https://i.ibb.co/GQL1GbL/Screenshot-2023-12-05-at-4-01-21-PM-removebg-preview.png" 
-    alt="C" className={classes.carla} ></img>
+    alt="C" className={`h-48 ${classes.carla} h-96`}
+
+
+    />
 
     {/* <Icon icon={chatBubble} width={24} height={24} /> */}
 
@@ -70,6 +74,6 @@ export default function signin() {
     </button>
         
     </div>
-
+    </div>
     </div>
 }

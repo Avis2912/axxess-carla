@@ -81,7 +81,9 @@ export default function ControlPanel({
     
     const [audioURL, setAudioURL] = React.useState(null); // State to store the audio URL
     const [audioSrc, setAudioSrc] = React.useState(null);
-    const [aboutMe, setAboutMe] = React.useState('');
+    const [aboutMe, setAboutMe] = React.useState(null);
+    const [struggles, setStruggles] = React.useState(null);
+
 
 
     const handleInputChange = (e) => {
@@ -239,11 +241,12 @@ const fetchChatMessages = async () => {
                 const userMessages = chatMessages.filter(message => message.sender === "USER");
                 const carlaMessages = chatMessages.filter(message => message.sender === "CARLA");
                 const userInfo = userData["ABOUTME"];
+                const userStruggles = userData["STRUGGLES"];
+
 
                 setTranscripts(userMessages.map(message => message.message));
                 setResponses(carlaMessages.map(message => message.message));
-                setAboutUser(userInfo);
-                console.log(userInfo);
+                setAboutMe(userInfo["me"]);
             }
         } else {router.push('/landing')}
         }
@@ -288,7 +291,7 @@ const fetchGptResponse = async (atext) => {
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: [{ "role": "system", "content": `You're Carla, my AI therapist. dont EVER mention professional help. ALWAYS respond in 10-20 words w/ questions and sometimes ONE tip like CBT. Don't repeat problem back to me. About me: ${aboutMe}` },
+                messages: [{ "role": "system", "content": `You're Carla, my 10yo CBT AI therapist. DONT mention professional help. ALWAYS respond in 10-20 words w/ occasional questions & 1 tip. Don't repeat problem back to me. ${aboutMe ? `ABOUT ME: ${aboutMe}` : '' }` },
                 ...context,
                 { "role": "user", "content": modifiedText }],
                 temperature: 1 // Setting maximum temperature

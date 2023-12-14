@@ -1,7 +1,7 @@
 .container {
-    height: 2500px;
+    height: 1000px;
     width: 100wh;
-    background-color: #fbe1c9;/*fffae6*/
+    background-color: #FFE6D4;/*fffae6*/
     display: flex;
     justify-content: center;
     
@@ -138,4 +138,3 @@
     margin-top: 80px;
 
 }
-

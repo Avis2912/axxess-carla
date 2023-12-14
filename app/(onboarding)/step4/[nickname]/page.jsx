@@ -66,7 +66,7 @@ export default function signin({ params }) {
   };
 
 
-    const isButtonDisabled = aboutMe.length < 10 || aboutGoal.length < 10 || aboutTraits.length < 10;  // Disable button if input length is less than 80
+    const isButtonDisabled = aboutMe.length < 5 || aboutGoal.length < 10 || aboutTraits.length < 10;  // Disable button if input length is less than 80
 
     const handleSubmit = () => {
         if (!isButtonDisabled) {
@@ -87,8 +87,8 @@ export default function signin({ params }) {
     
     <div className={classes.holder}>
 
-    <img src="https://i.postimg.cc/280D7746/undraw-Mobile-user-re-xta4-removebg-preview.png" alt="NAHH" 
-    style={{height: '200px', width: '320px', zIndex: 10, 
+    <img src="https://i.postimg.cc/ZqbrpgSc/undraw-Exams-re-4ios-removebg-preview.png" alt="NAHH" 
+    style={{height: '190px', width: '275px', zIndex: 10, 
     marginBottom: '0px',}}/>
 
     <div className={classes.text} >

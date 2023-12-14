@@ -94,8 +94,8 @@ export default function signin({ params }) {
     
     <div className={classes.holder}>
 
-    <img src="https://i.postimg.cc/280D7746/undraw-Mobile-user-re-xta4-removebg-preview.png" alt="NAHH" 
-    style={{height: '200px', width: '320px', zIndex: 1000, 
+    <img src="https://i.postimg.cc/zf1YDCTK/undraw-Buddies-2ae5-removebg-preview.png" alt="NAHH" 
+    style={{height: '200px', width: '230px', zIndex: 1000, 
     marginTop: '0px',}}/>
 
     <div className={classes.text} >

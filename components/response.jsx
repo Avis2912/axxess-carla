@@ -158,7 +158,8 @@ export default function Response({
                        
                         <div key={index + 8} className={classes.item}>
                         <img src="https://i.postimg.cc/LXwF7sj8/image-1.png" 
-                        alt="C" className={classes.pic} onClick={() => console.log('YUP')}></img>  
+                        alt="C" className={classes.pic} 
+                        onClick={() => console.log('YUP')}></img>  
                             {/* <div className={classes.timestamp}>{ item.timestamp }</div> */}
                             <div className={classes.text}>{response}</div>
                         </div>

@@ -165,7 +165,7 @@ export default function signin({ params }) {
     <FontAwesomeIcon icon={faComment} style={{ color: '#fae8d7', marginRight: '3px' }} /> 500 Weekly Messages
   </h3>
   <h3 className={classes.subtext} style={{ bottom: '30px' }}>
-    <FontAwesomeIcon icon={faPhone} style={{ color: '#fae8d7', marginRight: '3px' }} /> 200 Weekly Minutes
+    <FontAwesomeIcon icon={faPhone} style={{ color: '#fae8d7', marginRight: '3px' }} /> 60 Daily Minutes
   </h3>
   <h3 className={classes.subtext} style={{ bottom: '5px' }}>
     <FontAwesomeIcon icon={faBrain} style={{ color: '#fae8d7', marginRight: '3px' }} /> 50 Memory Slots

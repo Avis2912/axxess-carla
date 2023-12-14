@@ -69,8 +69,9 @@ export default function signin({ params }) {
     
     <div className={classes.holder}>
 
-    <img src="https://i.postimg.cc/280D7746/undraw-Mobile-user-re-xta4-removebg-preview.png" alt="NAHH" 
-    style={{height: '200px', width: '320px', zIndex: 1000, 
+    {/* https://i.postimg.cc/85jwRX6q/undraw-Thoughts-re-3ysu-removebg-preview.png */}
+    <img src="https://i.postimg.cc/Sxs9K97T/undraw-Book-reading-re-fu2c-removebg-preview.png" alt="NAHH" 
+    style={{height: '200px', width: '300px', zIndex: 1000, 
     marginTop: '0px',}}/>
 
     <div className={classes.text} >
