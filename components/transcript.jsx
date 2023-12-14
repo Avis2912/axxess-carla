@@ -99,19 +99,17 @@ export default function Transcript({
     //     };
         
 
-
-
-
     const handleDelete = (e) => {
         e.stopPropagation()
         e.preventDefault()
         onDelete(filename)
     }
 
-    // Multiply: &#215;
+
 
     return (
-        <div className={classes.container} onClick={onClick}>
+        <div className={classes.container} onClick={onClick}
+        style={{marginLeft: transcript.length < 15 && `${50}%` }}>
             <div className={classes.top}>
                 {/* <div className={classes.datetime}>{ formatDateTime(datetime) }</div> */}
                 <div onClick={handleDelete} className={classes.iconButton}>

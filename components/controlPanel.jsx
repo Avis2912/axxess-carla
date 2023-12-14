@@ -7,6 +7,10 @@ import SignalIcon from './signal'
 import StartButton, { startStates } from './startbutton'
 import StartButton2 from './startbutton2'
 import StopButton from './stopbutton'
+import MenuButton from './menubutton'
+import Menu from './menu'
+
+
 
 const axios = require('axios');
 
@@ -61,13 +65,15 @@ export default function ControlPanel({
     onResponse = undefined,
     onResponses = undefined,
     onTranscripts = undefined,
+    onPermission = undefined,
 }) {
 
     const [inputText, setInputText] = React.useState('');
     const [responses, setResponses] = React.useState([]);
     const [transcripts, setTranscripts] = React.useState([]);
 
-    const [hasLoaded, setHasLoaded] = React.useState(false);
+    const [hasLoaded, setHasLoaded] = React.useState(true);
+    const [loadCount, setLoadCount] = React.useState(0);
     const [micMessage, setMicMessage] = React.useState("");
     const [showPopup, setShowPopup] = React.useState(false);
     const [conversationHistory, setConversationHistory] = React.useState([]);
@@ -138,7 +144,7 @@ export default function ControlPanel({
     const handleMicEnter = async (mic="false") => {
 
         await onInput(micText);
-        await handleTextInput(micText);
+        // CHANGE await handleTextInput(micText);
         await setMicMessage('');
     };
 
@@ -201,38 +207,44 @@ React.useEffect(() => {
     }
 }, [micText]);
 
+
 React.useEffect(() => {
-
-    const fetchChatMessages = async () => {
-        try {
-            const userDocRef = doc(db, "users", auth?.currentUser?.email);
-    
-            const userDocSnapshot = await getDoc(userDocRef);
-    
-            if (userDocSnapshot.exists()) {
-                const userData = userDocSnapshot.data();
-                if (userData && userData["chat-1"]) {
-                    const chatMessages = userData["chat-1"];
-                    const userMessages = chatMessages.filter(message => message.sender === "USER");
-                    const carlaMessages = chatMessages.filter(message => message.sender === "CARLA");
-    
-                    setTranscripts(userMessages.map(message => message.message));
-                    setResponses(carlaMessages.map(message => message.message));
-                }
-            } else {alert('User Not Found. Please Login Again!')}
-
-        } catch (error) {
-            // Handle errors here
-            console.error("Error fetching chat messages:", error);
-            // You can add additional error handling logic here, such as displaying an error message to the user.
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+        console.log(auth?.currentUser?.email);
+        if (user) {
+            fetchChatMessages();
+        } else {
         }
-    };
-    
-    fetchChatMessages();
-    setHasLoaded(true);
-    
+    });
+    return () => unsubscribe();
+}, []);
 
-}, [] );
+const fetchChatMessages = async () => {
+    try {
+        if (auth.currentUser) {
+
+        const userDocRef = doc(db, "users", auth?.currentUser?.email);
+
+        const userDocSnapshot = await getDoc(userDocRef);
+
+        if (userDocSnapshot.exists()) {
+            const userData = userDocSnapshot.data();
+            if (userData && userData["chat-1"]) {
+                const chatMessages = userData["chat-1"];
+                const userMessages = chatMessages.filter(message => message.sender === "USER");
+                const carlaMessages = chatMessages.filter(message => message.sender === "CARLA");
+                
+                setTranscripts(userMessages.map(message => message.message));
+                setResponses(carlaMessages.map(message => message.message));
+            }
+        } else {alert('User Not Found. Please Login Again!')}
+        }
+    } catch (error) {
+        // Handle errors here
+        console.error("Error fetching chocolate messages:", error);
+        // You can add additional error handling logic here, such as displaying an error message to the user.
+    }
+};
 
 const getMicPermission = () => {
 
@@ -299,6 +311,8 @@ const fetchGptResponse = async (atext) => {
  
     const callPopup = () => {
         setShowPopup(!showPopup);
+        onPermission();
+        console.log('hi');
     };
 
     const handleTextToSpeech = async (text, outputPathPrefix) => {
@@ -386,7 +400,7 @@ const fetchGptResponse = async (atext) => {
 
             <button
                 // onClick={() => handleTextToSpeech("Hello world! Hello world! Hello world! Hello world!", audioOutputPrefix)}
-            >
+            style={{width: '100px', maxHeight: '100px;', position: 'absolute', opacity: showPopup ? '1' : '0'}}>
                 Generate Audio
             </button>
             {audioSrc && <audio src={audioSrc} controls />}
@@ -428,20 +442,31 @@ const fetchGptResponse = async (atext) => {
                 // onClick={disabled ? () => {} : onMicClick}
                 />
 
+                <MenuButton 
+                disabled={disabled}
+                isRecording={isRecording}
+                state={state}
+                onClick={callPopup}
+                showPopup={showPopup}  // Conditionally set the width
+                // onClick={disabled ? () => {} : onMicClick}
+                />
+
+                {/* <Menu /> */}
+
                
                 <div className={classes.item}>
-                    {
+                    {/* {
                         disabledSetting &&
                         <div className={disabledSetting ? classes.disabledButton : classes.iconButton}>
                             <SettingsIcon color={disabledSetting ? '#E6E6E6' : '#656565' } />
                         </div>
-                    }
-                    {
+                    } */}
+                    {/* {
                         !disabledSetting &&
                         <div className={disabledSetting ? classes.disabledButton : classes.disabledButton} onClick={disabledSetting ? () => {} : onSettingsClick}>
                         <img src="https://i.ibb.co/GQL1GbL/Screenshot-2023-12-05-at-4-01-21-PM-removebg-preview.png" 
                         alt="C" className={classes.pic}></img>                          </div>
-                    }
+                    } */}
                 </div>
 
             </div>

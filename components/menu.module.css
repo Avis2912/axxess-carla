@@ -1,9 +1,11 @@
 .container {
     position: absolute;
-    min-width: 40px;
-    height: 40px;
-    left: 7px;
-    border-radius: 20px;
+    min-width: 140px;
+    height: 80px;
+    right: 7px;
+    border-radius: 10px;
+
+    margin-bottom: 165px;
 
     box-sizing: border-box;
     display: flex;
@@ -14,7 +16,9 @@
     cursor: pointer;
     overflow: hidden;
     transition: all 1.5s ease-in;
-    background-color: #E5B999;
+    background-color: #fefefe;
+    /* border-width: 1px; */
+    border-color: rgb(215, 199, 170);
 
 }
 .center {
@@ -30,10 +34,14 @@
 }
 .icon {
     position: relative;
-    width: 22px;
-    height: 22px;
+    display: flex;
+    align-items: center;
+    width: 25px;
+    height: 25px;
     overflow: hidden;
+    font-size: 25px;
     color: white;
+    margin-top: 3px;
 }
 
 .disabled {

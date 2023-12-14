@@ -1,10 +1,11 @@
 .container {
-    background-color: #c69a72;
+    background-color: #FFE6D4;
     position: relative;
     height: 100%;
     padding-left: 15px;
     padding-right: 15px;
     align-items: center;
+    box-shadow: none;
 
 }
 
@@ -17,16 +18,18 @@
 
 .input {
     height: 50px;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    /* border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px; */
+    border-radius: 30px;
     border-color: transparent;
     width: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
-    font-size: 18px;
+    padding-left: 55.5px;
+    padding-right: 45px;
+    font-size: 20px;
     font-family: serif;
     /* color: #b98758; */
     transition: all 1.5s ease-in;
+    vertical-align:middle;
 
 }
 
@@ -36,6 +39,8 @@
     display: flex;
     justify-content: end;
     align-items: center;
+    box-shadow: none;
+
 }
 
 .bottom {
@@ -45,6 +50,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: none;
+
 }
 
 .item {
@@ -54,6 +61,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: none;
+
 }
 .item:last-child {
     border-right: 0;
@@ -61,6 +70,7 @@
 
 .iconPanel, .iconButton, .disabledButton {
     /* background-color: #ae7c7c; */
+    position: absolute;
     width: calc(100%);
     height: calc(100%);
     padding: 0px;
@@ -69,6 +79,8 @@
     padding-top: 20px;
     justify-content: center;
     align-items: center;
+    box-shadow: none;
+
 
 }
 
@@ -94,22 +106,22 @@
 .popup {
     position: fixed;
     bottom: 0;  
-    left: 50%;
-    transform: translateX(-50%); 
+    /* left: 50%; */
+    /* transform: translateX(-50%);  */
     /* transform: translateY(-100%); */
-    width: 400vh;
-    height: 150vh;
-    border-radius: 50%;
-    animation-fill-mode: forwards;
-    background-color: #c39162;
+    width: 100vw;
+    height: 100vh;
+    /* border-radius: 50%; */
+    /* animation-fill-mode: forwards; */
+    background-color: #bd9374;
     z-index: 1000;  
     opacity: 1;
     /* pointer-events: none; */
     transition: all 1.5s ease-in;
 
     display: flex;
-    flex-direction: column; /* Align children vertically */
-    align-items: center;
+    /* flex-direction: column; Align children vertically */
+    /* align-items: center; */
     justify-content: center;
 
     
@@ -118,27 +130,27 @@
 .popupClose {
     position: fixed;
     bottom: 0;  
-    left: -0%;
-    transform: translateX(0%);
-    transform: translateY(100%);
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    background-color: #c39162;
+    left: 0%;
+    /* transform: translateX(0%);
+    transform: translateY(100%); */
+    width: 100vw;
+    height: 100vh;
+    /* border-radius: 50%; */
+    background-color: #a98972;
     animation-fill-mode: forwards;
     z-index: 0;  
     opacity: 1;
     pointer-events: none;
     transition: all 0.8s ease-in 0s;
 
-    
+    opacity: 0;
+
 }
 
 .carla {
     position: absolute;
     height: 150px;
     width: 150px;
-    justify-content: center;
-    margin-top: 9%;
+    margin-top: 0%;
 }
 

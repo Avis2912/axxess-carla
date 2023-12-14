@@ -1,6 +1,7 @@
 .container {
     position: relative;
     height: 100vh;
+    background-color: #FFE6D4;
 }
 
 .pic {
@@ -11,9 +12,10 @@
 .main {
     /*background-color: #eef;*/
     position: relative;
-    height: calc(100% - 80px);
+    height: calc(100% - 65px);
     z-index: 1;
     overflow-y: auto;
+    
 }
 
 .list {
@@ -36,16 +38,15 @@
 }
 
 .control {
-    /*box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;*/
-    /*
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;;
-    */
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
     background-color: white;
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 80px;
+    height: 70px;
     z-index: 2;
+    box-shadow: none;
+    align-items: end;
+    margin-bottom: 0px;
 }

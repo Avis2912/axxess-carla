@@ -109,7 +109,7 @@ export default function signin({ params }) {
     <button 
     className={`${classes.button50} ${selectedOptions.includes('ADHD') ? classes.active : ''}`}
     onClick={() => handleOptionClick('ADHD')}
-    > ADHD
+    > Loneliness
     </button>
 
     

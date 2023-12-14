@@ -8,13 +8,9 @@ import PlayIcon from './play'
 import ArrowIcon from './arrow'
 import PauseIcon from './pause2'
 
-import { Icon } from '@iconify/react';
-import chatBubble from '@iconify-icons/ion/chatbubble';
-
-
 import AnimatedBars from './animatedBars'
 
-import classes from './stopbutton.module.css'
+import classes from './menu.module.css'
 
 const colorTypes = {
     default: '#666666',
@@ -31,7 +27,7 @@ export const startStates = {
     active: 'active',
 }
 
-function StopButton({ 
+function StartButton({ 
     disabled = false,
     isRecording = false,
     state = startStates.default, 
@@ -48,43 +44,27 @@ function StopButton({
     let classIcon = state === startStates.default ? classes.defaultColor : classes.activateColor
 
     return (
-        <>
-        <div className={classes.holder} style={{left: showPopup && '100vw'}}>
-        <button  onClick={disabled ? () => {} : onClick} className={classContainer}                
+        <div  onClick={disabled ? () => {} : onClick} className={classContainer}                
          style={{ opacity: showPopup && '0'}} >
             <div className={classes.center}>
                 <div className={classes.icon} >
-                    {
-                        // disabled ? <MicrophoneOffIcon className={classes.disabledColor} /> : <MicrophoneIcon className={classIcon} />
-                    }
-
-            <Icon icon={chatBubble} width={24} height={24} />
-
+                &#x2665;
+                    {/* {
+                        disabled ? <MicrophoneOffIcon className={classes.disabledColor} /> : <MicrophoneIcon className={classIcon} />
+                    } */}
                 </div>
-                
-               
-                {/* {
+                {
                     (!disabled && state === startStates.active ) &&
                     <div className={classes.bars}>
                         <AnimatedBars start={isRecording} />
                     </div>
-                } */}
+                }
             </div>
-        </button>
-
-        <img src="https://i.ibb.co/GQL1GbL/Screenshot-2023-12-05-at-4-01-21-PM-removebg-preview.png" 
-        alt="C" className={classes.carla} style={{ opacity: showPopup && '0'}}></img>   
-
-      </div>
-
-         <div className={classes.tap} style={{opacity: showPopup && '0'}}>
-         Tap Anywhere
-         </div>
-         </>
+        </div>
     )
 }
 
-StopButton.propTypes = {
+StartButton.propTypes = {
     /**
      * Disabled property
      */
@@ -103,4 +83,4 @@ StopButton.propTypes = {
     onClick: PropTypes.func,
 }
 
-export default StopButton
+export default StartButton

@@ -76,7 +76,7 @@ export default function MainPage() {
     const countRef = React.useRef(0)
     const recordDateTime = React.useRef('')
 
-    const [isReady, setReady] = React.useState(false)
+    const [isReady, setReady] = React.useState(true)
     const [errorMessage, setErrorMessage] = React.useState('')
 
     const [isRecording, setRecording] = React.useState(false)
@@ -136,15 +136,13 @@ export default function MainPage() {
 
     React.useEffect(() => {
 
-        // handleStream()
-
         // if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
         //     navigator.mediaDevices.getUserMedia({ audio: true }).then(handleStream).catch(handleError)
     
         // } else {
     
-        //     setErrorMessage('Media devices not supported')
+        //     setErrorMessage('Your Mic Is Not Supported :(')
             
         // }
 
@@ -203,7 +201,21 @@ export default function MainPage() {
 
     };
 
+    const getMicPermission = () => {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(handleStream).catch(handleError)
+    
+        } else {
+    
+            setErrorMessage('Your Mic Is Not Supported :(')
+            
+        }
+    }
+
     const handleStream = (stream) => {
+
+        console.log("RANNINNGGG");
 
         try {
             
@@ -369,13 +381,17 @@ export default function MainPage() {
         formData.append('datetime', datetime)
         formData.append('options', JSON.stringify(options))
 
+        for (const entry of formData.entries()) {
+            console.log(entry);
+          }
+
         console.log("[send data]", (new Date()).toLocaleTimeString())
 
         try {
 
             const url = '/api/'
             const response = await fetch(url, {
-                method: 'POST',
+                method: 'POST', 
                 headers: {
                     'Accept': 'application/json',
                 },
@@ -383,6 +399,7 @@ export default function MainPage() {
                 signal: abortControllerRef.current.signal,
             })
     
+            console.log(response);
             if(!response.ok) {
                 
                 /**
@@ -390,6 +407,7 @@ export default function MainPage() {
                  * problem in accessing the remote API endpoint for simplicity.
                  */
                 if(response.status === 500) {
+                    console.log('error');
                     setOpenSnack(true)
                 }
 
@@ -456,7 +474,11 @@ export default function MainPage() {
 
     }
 
+    
+
     const handleStart = () => {
+
+        console.log('RUNNINGGGGGGGGG');
 
         if(startRef.current === startStates.default) {
 
@@ -590,7 +612,9 @@ export default function MainPage() {
                     }
                 </div>
             }
+
             </div>
+
             <div className={classes.control}>
                 <ControlPanel
                 state={startState}
@@ -605,6 +629,7 @@ export default function MainPage() {
                 onResponse={handleResponse}
                 onResponses={handleResponses}
                 onTranscripts={handleTranscripts}
+                onPermission={getMicPermission}
                 />
             </div>
             {

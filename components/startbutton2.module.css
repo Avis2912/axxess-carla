@@ -21,8 +21,7 @@
 .container2 {
     position: absolute;
     min-width: 100vw;
-    min-height: 200vh;
-    border-radius: 50px;
+    min-height: 100vh;
     margin-inline: 0%;
     /* margin-top: 119vh; */
     box-sizing: border-box;

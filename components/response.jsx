@@ -143,7 +143,7 @@ export default function Response({
     // // Multiply: &#215;
 
     return (
-        <div className={classes.container} onClick={() => {alert('i')}}>
+        <div className={classes.container} onClick={() => {}}>
             <div className={classes.top}>
                 {/* <div className={classes.datetime}>{ formatDateTime(datetime) }</div>
                 <div onClick={handleDelete} className={classes.iconButton}>
@@ -157,7 +157,7 @@ export default function Response({
                         <>
                        
                         <div key={index + 8} className={classes.item}>
-                        <img src="https://i.ibb.co/GQL1GbL/Screenshot-2023-12-05-at-4-01-21-PM-removebg-preview.png" 
+                        <img src="https://i.postimg.cc/LXwF7sj8/image-1.png" 
                         alt="C" className={classes.pic} onClick={() => console.log('YUP')}></img>  
                             {/* <div className={classes.timestamp}>{ item.timestamp }</div> */}
                             <div className={classes.text}>{response}</div>
