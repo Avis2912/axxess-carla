@@ -109,12 +109,12 @@ export default function Transcript({
 
     return (
         <div className={classes.container} onClick={onClick}
-        style={{marginLeft: transcript.length < 15 && `${50}%` }}>
+        style={{marginLeft: transcript.length < 12 && `${50}%` }}>
             <div className={classes.top}>
                 {/* <div className={classes.datetime}>{ formatDateTime(datetime) }</div> */}
-                <div onClick={handleDelete} className={classes.iconButton}>
+                {/* <div onClick={handleDelete} className={classes.iconButton}>
                     <DeleteIcon color="black" />
-                </div>
+                </div> */}
             </div>
             <div className={classes.list}>
             {

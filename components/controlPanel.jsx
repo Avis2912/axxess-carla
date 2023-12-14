@@ -81,17 +81,21 @@ export default function ControlPanel({
     
     const [audioURL, setAudioURL] = React.useState(null); // State to store the audio URL
     const [audioSrc, setAudioSrc] = React.useState(null);
+    const [aboutMe, setAboutMe] = React.useState('');
+
 
     const handleInputChange = (e) => {
         setInputText(e.target.value);
     };
+
+    const contextLength = 3;
 
     const handleNewInteraction = (newPrompt, newResponse) => {
         // Add new prompt and response to history
         const updatedHistory = [...conversationHistory, { prompt: newPrompt, response: newResponse }];
 
         // Keep only the last 5 interactions
-        if (updatedHistory.length > 5) {
+        if (updatedHistory.length > contextLength) {
             updatedHistory.shift(); // Remove the oldest interaction
         }
 
@@ -234,9 +238,12 @@ const fetchChatMessages = async () => {
                 const chatMessages = userData["chat-1"];
                 const userMessages = chatMessages.filter(message => message.sender === "USER");
                 const carlaMessages = chatMessages.filter(message => message.sender === "CARLA");
-                
+                const userInfo = userData["ABOUTME"];
+
                 setTranscripts(userMessages.map(message => message.message));
                 setResponses(carlaMessages.map(message => message.message));
+                setAboutUser(userInfo);
+                console.log(userInfo);
             }
         } else {router.push('/landing')}
         }
@@ -281,7 +288,7 @@ const fetchGptResponse = async (atext) => {
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: [{ "role": "system", "content": "You're Carla, my AI therapist. dont EVER mention professional help. ALWAYS respond briefly in 10-20 words w/ questions and sometimes ONE actionable tip like CBT. Don't act like a robot & repeat question/problem back to me. Talk like a 10 year old." },
+                messages: [{ "role": "system", "content": `You're Carla, my AI therapist. dont EVER mention professional help. ALWAYS respond in 10-20 words w/ questions and sometimes ONE tip like CBT. Don't repeat problem back to me. About me: ${aboutMe}` },
                 ...context,
                 { "role": "user", "content": modifiedText }],
                 temperature: 1 // Setting maximum temperature
