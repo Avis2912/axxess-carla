@@ -389,7 +389,7 @@ export default function MainPage() {
 
         try {
 
-            const url = '/api/'
+            const url = '/api/speechToText'
             const response = await fetch(url, {
                 method: 'POST', 
                 headers: {
