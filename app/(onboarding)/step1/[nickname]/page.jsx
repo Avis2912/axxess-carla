@@ -50,15 +50,15 @@ export default function signin({ params }) {
       const isValidEmail = /^[a-zA-Z0-9.]*$/.test(email);
   
       if (isValidEmail) {
-          router.push(`/step1/${email}`);
+          // router.push(`/step1/${email}`);
       } else {
           alert('Try another nickname!');
           return
       }
   
     
-      const fakeEmail = `${email}@gmail.com`; 
-        try {
+      const fakeEmail = `${email.toLowerCase()}@gmail.com`;
+      try {
           await createUserWithEmailAndPassword(auth, fakeEmail, password);
           await addUser(fakeEmail, email, password);
         } catch (err) {

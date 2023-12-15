@@ -171,6 +171,8 @@ export default function ControlPanel({
 
 const addCarlaMessage = async (text) => {
 
+    if (showPopup) {handleTextToSpeech(text)}
+
     const currentDate = new Date();
     const options = { hour: 'numeric', minute: 'numeric', hour12: true, day: 'numeric', month: 'short',};
     const formattedTime = currentDate.toLocaleString('en-US', options);
@@ -183,7 +185,7 @@ const addCarlaMessage = async (text) => {
         sender: "CARLA", 
         message: text,
         time: reversedFormattedTime,
-        via: 'text'
+        via: showPopup ? 'audio' : 'text'
     };
 
     await updateDoc(userDocRef, {
@@ -326,25 +328,57 @@ const fetchGptResponse = async (atext) => {
         console.log('hi');
     };
 
-    const handleTextToSpeech = async (text, outputPathPrefix) => {
-        
+    async function playAudioFromBuffer(buffer) {
+        try {
+            const blob = new Blob([buffer], { type: 'audio/mpeg' });
+            const audioUrl = URL.createObjectURL(blob);
+            const audio = new Audio(audioUrl);
+            audio.play();
+        } catch (error) {
+            console.error('Error playing audio:', error);
+        }
+    }
+    
+    async function handleTextToSpeech(text) {
         try {
             const response = await fetch('/api/textToSpeech', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ text, outputPathPrefix })
+                body: JSON.stringify({ text }),
             });
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-            const audioPath = data.audioPath; // Path received from the server
-            setAudioSrc(audioPath); // Update the state with the new audio path
+            if (data && data.audioFilePath && data.audioFilePath.data) {
+                const audioUrl = bufferToBlob(data.audioFilePath.data);
+                playAudio(audioUrl);
+            } else {
+                throw new Error('Invalid audio data received');
+            }
         } catch (error) {
-            console.error("Error:", error);
+            console.error('Error in text to speech:', error);
         }
+    }
+    
+    function bufferToBlob(buffer, type = 'audio/mpeg') {
+        const blob = new Blob([new Uint8Array(buffer)], { type });
+        return URL.createObjectURL(blob);
+    }
+    
+    function playAudio(audioUrl) {
+        const audio = new Audio(audioUrl);
+        audio.play().catch(e => console.error('Error playing audio:', e));
+        audio.onerror = (e) => {
+            console.error('Error in audio playback:', e);
+        };
+    
+    
+  
+    
+
 
 
         // // Configure the OpenAI TTS (text to speech) API Calls
@@ -409,12 +443,6 @@ const fetchGptResponse = async (atext) => {
         alt="C" className={classes.carla}></img>   
          */}
 
-            <button
-                // onClick={() => handleTextToSpeech("Hello world! Hello world! Hello world! Hello world!", audioOutputPrefix)}
-            style={{width: '100px', maxHeight: '100px;', position: 'absolute', opacity: showPopup ? '1' : '0'}}>
-                Generate Audio
-            </button>
-            {audioSrc && <audio src={audioSrc} controls />}
 
 
 
