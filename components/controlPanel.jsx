@@ -15,11 +15,6 @@ import { useRouter } from 'next/navigation'
 
 const axios = require('axios');
 
-
-// import { exec } from "child_process";
-// import fs from "fs";
-// import readline from "readline";
-// import queue from "queue";
 import dotenv from "dotenv";
 
 import { getFirestore, doc, setDoc, getDoc, collection, updateDoc, arrayUnion } from 'firebase/firestore';
@@ -33,24 +28,9 @@ import classes from './controlPanel.module.css'
 
 dotenv.config();
 
-// Define folders to store screenshots and audio files, create them if they don't exist.
-// const screenshotsDir = "./screenshots";
+
 const audioDir = "./audio";
-// const filePrefix = "screenshot";
 const audioOutputPrefix = "audio";
-
-// if (!fs.existsSync(screenshotsDir)) {
-//   fs.mkdirSync(screenshotsDir, { recursive: true });
-// }
-// if (!fs.existsSync(audioDir)) {
-//   fs.mkdirSync(audioDir, { recursive: true });
-// }
-
-// // Set up a readline interface so the user can trigger the AI actions in the terminal
-// const rl = readline.createInterface({
-//   input: process.stdin,
-//   output: process.stdout,
-// });
 
 
 export default function ControlPanel({
@@ -84,7 +64,14 @@ export default function ControlPanel({
     const [aboutMe, setAboutMe] = React.useState(null);
     const [struggles, setStruggles] = React.useState(null);
 
+    const [weeklyTextCounter, setWeeklyTextCounter] = React.useState(0)
+    const [weeklyTextLimit, setWeeklyTextLimit] = React.useState(100)
 
+    const [weeklyAudioCounter, setWeeklyAudioCounter] = React.useState(0)
+    const [weeklyAudioLimit, setWeeklyAudioLimit] = React.useState(5)
+
+    const [dailyAudioCounter, setDailyAudioCounter] = React.useState(0)
+    const [dailyAudioLimit, setDailyAudioLimit] = React.useState(30)
 
     const handleInputChange = (e) => {
         setInputText(e.target.value);

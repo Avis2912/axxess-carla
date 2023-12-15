@@ -55,7 +55,16 @@ export default function signin({ params }) {
       
       // Add the message to the user's chat
       await updateDoc(userDocRef, {
-          "DAILY_COMMIT": `${option} Minutes`
+          "DAILY_COMMIT": `${option} Minutes`,
+
+          "WEEKLY_TEXT_COUNT": 0,
+          "WEEKLY_TEXT_LIMIT": 100,
+
+          "WEEKLY_AUDIO_COUNT": 0,
+          "WEEKLY_AUDIO_LIMIT": 5,
+
+          "DAILY_AUDIO_COUNT": 0,
+          "DAILY_AUDIO_LIMIT": 0,
       });
 
 
