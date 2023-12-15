@@ -151,7 +151,7 @@ export default function ControlPanel({
     const handleMicEnter = async (mic="false") => {
 
         await onInput(micText);
-        // CHANGE await handleTextInput(micText);
+        await handleTextInput(micText);
         await setMicMessage('');
     };
 
