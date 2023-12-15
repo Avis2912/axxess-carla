@@ -171,7 +171,7 @@ export default function ControlPanel({
 
 const addCarlaMessage = async (text) => {
 
-    if (showPopup) {handleTextToSpeech(text)}
+    // if (showPopup) {handleTextToSpeech(text)}
 
     const currentDate = new Date();
     const options = { hour: 'numeric', minute: 'numeric', hour12: true, day: 'numeric', month: 'short',};
