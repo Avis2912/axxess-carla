@@ -36,29 +36,29 @@ function StartButton({
 
 }) {
 
-    let classContainer = state === startStates.default ? [classes.container, classes.default].join(' ') : [classes.container, classes.activate].join(' ')
+    let classContainer = state === startStates.default ? [classes.container, classes.default].join(' ') : [classes.container, classes.default].join(' ')
     if(disabled) {
         classContainer = [classes.container, classes.disabled].join(' ')
     }
 
-    let classIcon = state === startStates.default ? classes.defaultColor : classes.activateColor
+    let classIcon = state === startStates.default ? classes.defaultColor : classes.defaultColor
 
     return (
         <div  onClick={disabled ? () => {} : onClick} className={classContainer}                
          style={{ opacity: showPopup && '0'}} >
             <div className={classes.center}>
-                <div className={classes.icon} >
+                <div  >
                 &#x2665;
                     {/* {
                         disabled ? <MicrophoneOffIcon className={classes.disabledColor} /> : <MicrophoneIcon className={classIcon} />
                     } */}
                 </div>
-                {
+                {/* {
                     (!disabled && state === startStates.active ) &&
                     <div className={classes.bars}>
                         <AnimatedBars start={isRecording} />
                     </div>
-                }
+                } */}
             </div>
         </div>
     )

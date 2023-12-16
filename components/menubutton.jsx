@@ -57,12 +57,12 @@ function MenuButton({
                         disabled ? <MicrophoneOffIcon className={classes.disabledColor} /> : <MicrophoneIcon className={classIcon} />
                     } */}
                 </div>
-                {
+                {/* {
                     (!disabled && state === startStates.active ) &&
                     <div className={classes.bars}>
                         <AnimatedBars start={isRecording} />
                     </div>
-                }
+                } */}
             </div>
         </div>
     )
