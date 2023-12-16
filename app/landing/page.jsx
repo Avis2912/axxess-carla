@@ -42,15 +42,23 @@ export default function signin() {
   };
   
     return <div>
-      {/* <div style={{height: '200px', width: '200px', position: 'absolute', backgroundColor: 'red'}}></div> */}
       <div className={classes.container}>
+      <div style={{height: '55px', width: '100vw', position: 'absolute', backgroundColor: 'white',
+      display: 'flex', alignItems: 'center', padding: '20px', justifyContent: 'space-between',
+      backgroundColor: '#FFE6D4', borderStyle: 'dotted', borderBottomWidth: '0.0px', borderColor: 'brown',
+      borderRightWidth: '0px', borderTopWidth: '0px', borderLeftWidth: '0px'}}>
+        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}><img src="https://i.postimg.cc/T1LRJn9W/decentral-21-removebg-preview.png" 
+        style={{color: 'rgb(119, 85, 59)', height: '24px', width: '24px', paddingTop: '0px'}}></img>
+        <p style={{color: 'rgb(119, 85, 59)', fontSize: '20px', fontFamily: 'serif', marginLeft: '4px',}}
+        onClick={()=>{router.push('/')}}>Carla</p></div>
+        <p style={{color: 'rgb(119, 85, 59)', fontSize: '20px', fontFamily: 'serif', }}
+        onClick={()=>{router.push('/mission')}}>Mission</p>
+      </div>
+
         
     <div className={classes.carla_container} />
     <img src="https://i.ibb.co/GQL1GbL/Screenshot-2023-12-05-at-4-01-21-PM-removebg-preview.png" 
-    alt="C" className={`h-48 ${classes.carla} h-96`}
-
-
-    />
+    alt="C" className={`h-48 ${classes.carla} h-96`} />
 
     {/* <Icon icon={chatBubble} width={24} height={24} /> */}
 
@@ -69,11 +77,53 @@ export default function signin() {
     className={classes.nickname}
     onChange={(e) => setEmail(e.target.value)} />
 
-    <button className={classes.button} onClick={signup}>
+    <button className={classes.button} onClick={signup}
+    style={{'@media (max-width: 600px)': {
+      backgroundColor: 'red'
+    }}}>
     💬 Message Carla 
     </button>
         
     </div>
+    <div style={{
+  height: '500px', 
+  width: '100%', 
+  backgroundColor: 'transparent',
+  position: 'absolute', 
+  marginTop: '530px',
+  display: 'flex', 
+  flexDirection: 'row', 
+  flexWrap: 'wrap',
+  justifyContent: 'center', 
+  alignItems: 'center'
+}}>
+  <div style={{
+    height: '250px', 
+    width: '350px', 
+    backgroundColor: 'white',
+    borderRadius: '14px',
+    margin: '15px',
+    '@media (max-width: 600px)': {
+      margin: '15px auto'
+    }
+  }}>
+  </div>
+
+  <div style={{
+    height: '250px', 
+    width: '350px', 
+    backgroundColor: 'white',
+    borderRadius: '14px',
+    margin: '15px',
+    '@media (max-width: 600px)': {
+      margin: '15px auto'
+    }
+  }}>
+  </div>
+
+    </div>
+
+
     </div>
     </div>
 }

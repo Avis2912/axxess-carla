@@ -399,7 +399,6 @@ export default function MainPage() {
                 signal: abortControllerRef.current.signal,
             })
     
-            console.log(response);
             if(!response.ok) {
                 
                 /**
@@ -413,61 +412,28 @@ export default function MainPage() {
 
             }
 
-            const result = await response.json()
+            const resultString = await response.text();
+            const resultObject = JSON.parse(resultString);
+
+            const result = resultObject.data;
+            console.log(result);
 
             setSendCount((prev) => prev - 1)
 
             console.log("[received data]", (new Date()).toLocaleTimeString())
 
-            /**
-             * verify if result does not contain any useful data, disregard
-             */
-            const data = result?.data
-
-            if(data) {
-
-                /**
-                 * we will check if there is timestamp
-                 * we are using vtt format so we should always have it
-                 */
-                if(data.indexOf(':') > 0 && data.indexOf("-->") > 0) {
+            if(result) {
 
 
-                    let items = []
-                    let index = -1
-                    let flag = false
-
-                    const tokens = data.split("\n")
-
-                    for (let i = 0; i < tokens.length; i++) {
-                    const s = tokens[i].trim()
-                    if(s.indexOf(':') > 0 && s.indexOf('-->') > 0) {
-                        index++
-                        items.push({ timestamp: s, text: '' })
-                        flag = true
-                    } else if(flag) {
-                        items[index].text = s
-                        flag = false
-                    }
-                    }
-
-                    let atext = "";
-                    console.log(items);
-
-                    for (let i = 0; i < items.length; i++) {
-                        atext += items[i].text;
-                    }
-
-                    setMicMessage(atext);
+                    setMicMessage(result);
                     // addDataItems(result);
-
 
                 }
 
             }
             
 
-        } catch(err) {
+         catch(err) {
             console.log(err)
             setSendCount((prev) => prev - 1)
         }

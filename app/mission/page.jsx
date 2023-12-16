@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from 'next/navigation';
-import classes from './step6.module.css';
+import classes from './mission.module.css';
 
 // import { Icon } from '@iconify/react';
 import chatBubble from '@iconify-icons/ion/chatbubble';
@@ -22,6 +22,7 @@ export default function signin({ params }) {
   const router = useRouter();
   const [user, setUser] = useState(null); // State to store the current user
   const [selectedOption, setSelectedOption] = useState(null);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(currentUser => {
@@ -42,7 +43,7 @@ export default function signin({ params }) {
       setEmail(`${params.nickname}`);
     }, []);
 
-    const addTime = async (userEmail, option) => {
+    const addGender = async (userEmail, option) => {
 
       const userDocRef = doc(db, "users", userEmail);
       
@@ -53,38 +54,44 @@ export default function signin({ params }) {
           await setDoc(userDocRef, { /* Add any initial data you need here */ });
       }
       
-      const LIMITS = {
-          "WEEKLY_TEXT_COUNT": 0,
-          "WEEKLY_TEXT_LIMIT": 100,
+      const user_details = {
+          style: option,
+      };
 
-          "WEEKLY_AUDIO_COUNT": 0,
-          "WEEKLY_AUDIO_LIMIT": 5,
-
-          "DAILY_AUDIO_COUNT": 0,
-          "DAILY_AUDIO_LIMIT": 0,
-      }
-
+      const style = option;
+  
       // Add the message to the user's chat
       await updateDoc(userDocRef, {
-        "DAILY_COMMIT": `${option} Minutes`,
-        LIMITS,
-        "PLAN": "Free"
+          "GENDER": style
       });
 
 
   };
 
-     
+  const handleSubmit = () => {
+    router.push(`/`);
+  }
 
-    const handleOptionClick = (option) => {
-      setSelectedOption(option);
-      addTime(`${params.nickname}@gmail.com`, option)
-      router.push(`/step7/${params.nickname}`);
-  };
+  const agree = () => {
+    setSelectedOption('Agree');
+    setIsButtonDisabled(false);
+  }
 
+    return <>
+    
+    <div className={classes.container}>
 
-
-    return <div className={classes.container}>
+    <div style={{height: '55px', width: '100vw', position: 'absolute', backgroundColor: 'white',
+      display: 'flex', alignItems: 'center', padding: '20px', justifyContent: 'space-between',
+      backgroundColor: '#FFE6D4', borderStyle: 'dotted', borderBottomWidth: '0.0px', borderColor: 'brown',
+      borderRightWidth: '0px', borderTopWidth: '0px', borderLeftWidth: '0px'}}>
+        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}><img src="https://i.postimg.cc/T1LRJn9W/decentral-21-removebg-preview.png" 
+        style={{color: 'rgb(119, 85, 59)', height: '24px', width: '24px', paddingTop: '0px'}}></img>
+        <p style={{color: 'rgb(119, 85, 59)', fontSize: '20px', fontFamily: 'serif', marginLeft: '4px',}}
+        onClick={()=>{router.push('/landing')}}>Carla</p></div>
+        <p style={{color: 'rgb(119, 85, 59)', fontSize: '20px', fontFamily: 'serif', }}
+        onClick={()=>{router.push('/mission')}}>Mission</p>
+      </div>
 
         
     {/* <div className={classes.carla_container} />
@@ -96,47 +103,34 @@ export default function signin({ params }) {
     
     <div className={classes.holder}>
 
-    <img src="https://i.postimg.cc/d0ScKbQN/undraw-Online-re-x00h-removebg-preview.png" alt="NAHH" 
-    style={{height: '200px', width: '260px', zIndex: 1000, 
-    marginTop: '0px',}}/>
+    <img src="https://i.postimg.cc/tCc8ZPnS/undraw-Romantic-getaway-re-3f45-removebg-preview.png" alt="NAHH" 
+    style={{height: '200px', width: '255px', zIndex: 1000, 
+    marginBottom: '30px',}}/>
 
     <div className={classes.text} >
-    I Will Spend <br></br>
+    Carla Is Not <br></br>
+    A Substitute
     
     </div>
 
     <div className={classes.text2} >
-    Set A Daily Mental Health Target<br></br>
+    If at any point I experience the<br/>
+    need to speak to a real person,<br/>
+    I'll get professional help ASAP.
     </div>
 
     <button 
-    className={`${classes.button50} ${selectedOption === '5' ? classes.active : ''}`}
-    onClick={() => handleOptionClick('5')}
-    > 5 Minutes / Day
+    className={`${classes.button50} ${selectedOption === 'Agree' ? classes.active : ''}`}
+    onClick={() => agree()}
+    > I Agree
     </button>
-
-    <button 
-    className={`${classes.button50} ${selectedOption === '10' ? classes.active : ''}`}
-    onClick={() => handleOptionClick('10')}
-    > 10 Minutes / Day
+    
+    <button className={classes.button} onClick={handleSubmit} disabled={isButtonDisabled}>
+    💬 Message Carla!
     </button>
-
-    <button 
-    className={`${classes.button50} ${selectedOption === '15' ? classes.active : ''}`}
-    onClick={() => handleOptionClick('15')}
-    > 15 Minutes / Day
-    </button>
-
-    <button 
-    className={`${classes.button50} ${selectedOption === '30+' ? classes.active : ''}`}
-    onClick={() => handleOptionClick('30+')}
-    > 30 Minutes / Day
-    </button>
-
-        {selectedOption && <p>Selected: {selectedOption}</p>}
-
         
     </div>
 
     </div>
-}
+    </>
+}   

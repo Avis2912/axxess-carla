@@ -25,6 +25,7 @@ import { auth } from '/firebaseConfig.js';
 const db = getFirestore(app);
 
 import classes from './controlPanel.module.css'
+import { setDefaultEventParameters } from 'firebase/analytics'
 
 dotenv.config();
 
@@ -67,11 +68,70 @@ export default function ControlPanel({
     const [weeklyTextCounter, setWeeklyTextCounter] = React.useState(0)
     const [weeklyTextLimit, setWeeklyTextLimit] = React.useState(100)
 
+    const [seconds, setSeconds] = React.useState(0)
     const [weeklyAudioCounter, setWeeklyAudioCounter] = React.useState(0)
     const [weeklyAudioLimit, setWeeklyAudioLimit] = React.useState(5)
 
     const [dailyAudioCounter, setDailyAudioCounter] = React.useState(0)
     const [dailyAudioLimit, setDailyAudioLimit] = React.useState(30)
+
+    const [plan, setPlan] = React.useState("Free");
+    const [isText, setIsText] = React.useState(true);
+    const [isAudio, setIsAudio] = React.useState(true);
+
+
+    React.useEffect(() => {
+        if (weeklyTextCounter % 10 === 0 && weeklyTextCounter !== 0) {updateCounter()}
+        if (weeklyTextCounter > weeklyTextLimit) {
+            updateCounter()
+            setIsText(false);
+        }
+    }, [weeklyTextCounter])
+
+    React.useEffect(() => {
+        if (weeklyAudioCounter !== 0) {updateCounter()}
+        if (weeklyAudioCounter > weeklyAudioLimit) {
+            updateCounter()
+            setIsAudio(false);
+            setShowPopup(false);
+        }
+    }, [weeklyAudioCounter])
+
+    React.useEffect(() => {
+        if (showPopup) {
+            const intervalId = setInterval(() => {
+                setSeconds((prevCounter) => {
+                    const updatedSeconds = prevCounter + 1;
+                    // console.log(updatedSeconds); 
+                    if (updatedSeconds % 60 === 0 && updatedSeconds !== 0) {
+                        setWeeklyAudioCounter((prevCounter) => prevCounter + 0.5);
+                    }
+                    return updatedSeconds;
+                });
+            }, 1000);
+            return () => clearInterval(intervalId);
+        }
+    }, [showPopup]);
+    
+
+    const updateCounter = async () => {
+        const userDocRef = doc(db, "users", auth?.currentUser?.email);
+    
+        const userDocSnapshot = await getDoc(userDocRef);
+        const userData = userDocSnapshot.data();
+    
+        const updatedLimits = {
+            ...userData.LIMITS,
+            "WEEKLY_TEXT_COUNT": weeklyTextCounter, 
+            "WEEKLY_AUDIO_COUNT": weeklyAudioCounter,
+        };
+    
+        // Update the user document with the new "LIMITS" data
+        await updateDoc(userDocRef, {
+            LIMITS: updatedLimits,
+        });
+    };
+    
 
     const handleInputChange = (e) => {
         setInputText(e.target.value);
@@ -93,25 +153,22 @@ export default function ControlPanel({
 
 
     const handleTextInput = async (text) => {
-        // alert('this');
 
         const addUserMessage = async (text, userEmail) => {
+
+            if (text == "") {return};
+            // console.log(weeklyTextCounter + 1);
+            setWeeklyTextCounter(weeklyTextCounter + 1);
 
             const currentDate = new Date();
             const options = { hour: 'numeric', minute: 'numeric', hour12: true, day: 'numeric', month: 'short',};
             const formattedTime = currentDate.toLocaleString('en-US', options);
             const reversedFormattedTime = formattedTime.replace(',', ' |') + " | '23";
-
-
-                
+       
             const userDocRef = doc(db, "users", userEmail);
-            
-
-            // Check if the user's folder exists
             const userDocSnapshot = await getDoc(userDocRef);
             
             if (!userDocSnapshot.exists()) {
-                // If the folder doesn't exist, create it
                 await setDoc(userDocRef, { /* Add any initial data you need here */ });
             }
             
@@ -122,7 +179,6 @@ export default function ControlPanel({
                 via: 'text'
             };
         
-            // Add the message to the user's chat
             await updateDoc(userDocRef, {
                 "chat-1": arrayUnion(newMessage)
             });
@@ -143,7 +199,6 @@ export default function ControlPanel({
     };
 
     
-
     const handleInputEnter = async (e) => {
  
         if (e.key === 'Enter' && inputText.trim() !== '') {
@@ -158,15 +213,13 @@ export default function ControlPanel({
 
 const addCarlaMessage = async (text) => {
 
-    if (!showPopup) {handleTextToSpeech(text)}
+    if (showPopup) {handleTextToSpeech(text)}
 
     const currentDate = new Date();
     const options = { hour: 'numeric', minute: 'numeric', hour12: true, day: 'numeric', month: 'short',};
     const formattedTime = currentDate.toLocaleString('en-US', options);
     const reversedFormattedTime = formattedTime.replace(',', ' |') + " | '23";
-
-
-        
+  
     const userDocRef = doc(db, "users", auth?.currentUser?.email);
     const newMessage = { 
         sender: "CARLA", 
@@ -232,6 +285,14 @@ const fetchChatMessages = async () => {
                 const userInfo = userData["ABOUTME"];
                 const userStruggles = userData["STRUGGLES"];
 
+                setPlan(userData["PLAN"]);
+                const limits = userData["LIMITS"];
+                setWeeklyTextLimit(limits["WEEKLY_TEXT_LIMIT"]);
+                setWeeklyTextCounter(limits["WEEKLY_TEXT_COUNT"]);
+                setWeeklyAudioLimit(limits["WEEKLY_AUDIO_LIMIT"]);
+                setWeeklyAudioCounter(limits["WEEKLY_AUDIO_COUNT"]);
+                setDailyAudioLimit(limits["DAILY_AUDIO_LIMIT"]);
+                setDailyAudioCounter(limits["DAILY_AUDIO_COUNT"]);
 
                 setTranscripts(userMessages.map(message => message.message));
                 setResponses(carlaMessages.map(message => message.message));
@@ -312,7 +373,6 @@ const fetchGptResponse = async (atext) => {
     const callPopup = () => {
         setShowPopup(!showPopup);
         onPermission();
-        console.log('hi');
     };
 
     async function playAudioFromBuffer(buffer) {
@@ -361,55 +421,6 @@ const fetchGptResponse = async (atext) => {
         audio.onerror = (e) => {
             console.error('Error in audio playback:', e);
         };
-    
-    
-  
-    
-
-
-
-        // // Configure the OpenAI TTS (text to speech) API Calls
-        // const url = "https://api.openai.com/v1/audio/speech";
-        // const headers = {
-        //     Authorization: `Bearer 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`,
-        //     "Content-Type": "application/json",
-        // };
-
-        // // params
-        // const data = {
-        //     model: "tts-1-hd",
-        //     input: text, // This is what the Vision API responded with
-        //     voice: "nova", // This is the pre-selected voice, can be changed
-        //     response_format: "mp3",
-        // };
-
-        // // Make call to the TTS API
-        // try {
-        //     const response = await axios.post(url, data, {
-        //     headers: headers,
-        //     responseType: "arraybuffer",
-        //     });
-
-        //     // Set up an audioBuffer and store the TTS response as a uniquely named MP3 file
-        //     const audioBuffer = Buffer.from(response.data, "binary");
-        //     const timestamp = new Date().toISOString().replace(/:/g, "-");
-        //     const audioFilename = `${outputPathPrefix}_${timestamp}.mp3`;
-        //     const audioPath = `${audioDir}/${audioFilename}`;
-        //     fs.writeFileSync(audioPath, audioBuffer);
-
-        //     // Add the newly created mp3 to a queue
-        //     return audioPlaybackQueue.push(function (cb) {
-        //     console.log(`\n${inputText}\n`);
-        //     playAudio(audioPath)
-        //         .then(() => cb())
-        //         .catch((error) => {
-        //         console.error("Error in audio playback:", error);
-        //         cb();
-        //         });
-        //     });
-        // } catch (error) {
-        //     console.error("Error in streamedAudio:", error.message);
-        // }
     };
 
 
@@ -431,8 +442,6 @@ const fetchGptResponse = async (atext) => {
          */}
 
 
-
-
         <StopButton
         disabled={disabled}
         isRecording={isRecording}
@@ -444,7 +453,6 @@ const fetchGptResponse = async (atext) => {
 
 
 
-
         <div className={classes.container}>
 
             <div className={classes.center}>
@@ -452,18 +460,17 @@ const fetchGptResponse = async (atext) => {
             <input 
             placeholder="Message Carla" 
             className={classes.input}
-            value={inputText}
+            value={isText ? inputText : 'Weekly Limit Hit'}
             onChange={handleInputChange}
-            onKeyDown={handleInputEnter}
-            style={{ opacity: showPopup && '0'}}  // Conditionally set the width
-
+            onKeyDown={isText ? handleInputEnter : ()=>{}}
+            style={{ opacity: showPopup && '0', backgroundColor: !isText && '#E5B999'}}  // Conditionally set the width
             />
 
                 <StartButton 
                 disabled={disabled}
                 isRecording={isRecording}
                 state={state}
-                onClick={callPopup}
+                onClick={isAudio ? callPopup : () => {alert('Weekly Call Limit Hit')}}
                 showPopup={showPopup}  // Conditionally set the width
                 // onClick={disabled ? () => {} : onMicClick}
                 />
@@ -472,7 +479,7 @@ const fetchGptResponse = async (atext) => {
                 disabled={disabled}
                 isRecording={isRecording}
                 state={state}
-                onClick={callPopup}
+                // onClick={callPopup}
                 showPopup={showPopup}  // Conditionally set the width
                 // onClick={disabled ? () => {} : onMicClick}
                 />
