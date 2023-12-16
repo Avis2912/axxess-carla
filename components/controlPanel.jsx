@@ -48,6 +48,7 @@ export default function ControlPanel({
     onResponses = undefined,
     onTranscripts = undefined,
     onPermission = undefined,
+    isListening = undefined,
 }) {
 
     const [inputText, setInputText] = React.useState('');
@@ -428,6 +429,8 @@ const fetchGptResponse = async (atext) => {
         <>
         <div
         className={`${showPopup ? classes.popup : classes.popupClose}`}
+        style={{borderColor: isListening && '#FFE6D4', borderRadius: isListening && '12px'
+    }}
         >  
             <StartButton2
         disabled={disabled}
@@ -435,6 +438,7 @@ const fetchGptResponse = async (atext) => {
         state={state}
         showPopup={!showPopup} 
         onClick={disabled ? () => {} : onMicClick}
+        isListening={isListening}
         />
 
         {/* <img src="https://i.ibb.co/GQL1GbL/Screenshot-2023-12-05-at-4-01-21-PM-removebg-preview.png" 
@@ -448,6 +452,7 @@ const fetchGptResponse = async (atext) => {
         state={state}
         showPopup={!showPopup} 
         onClick={callPopup}
+        isListening={isListening}
         />
           </div>
 

@@ -37,6 +37,7 @@ function StopButton({
     state = startStates.default, 
     onClick = undefined,
     showPopup = false,
+    isListening = false,
 
 }) {
 
@@ -49,9 +50,9 @@ function StopButton({
 
     return (
         <>
-        <div className={classes.holder} style={{left: showPopup && '100vw'}}>
+        <div className={classes.holder} style={{left: showPopup && '100vw', }}>
         <button  onClick={disabled ? () => {} : onClick} className={classContainer}                
-         style={{ opacity: showPopup && '0'}} >
+         style={{ opacity: showPopup && '0', }} >
             <div className={classes.center}>
                 <div className={classes.icon} >
                     {
@@ -78,7 +79,7 @@ function StopButton({
       </div>
 
          <div className={classes.tap} style={{opacity: showPopup && '0'}}>
-         Tap Anywhere
+         {isListening ? 'Speak Normally' : 'Tap Anywhere'}
          </div>
          </>
     )

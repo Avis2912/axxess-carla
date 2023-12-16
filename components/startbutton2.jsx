@@ -33,6 +33,7 @@ function StartButton({
     state = startStates.default, 
     onClick = undefined,
     showPopup = false,
+    isListening = false,
 
 }) {
 
@@ -65,7 +66,7 @@ function StartButton({
             <div className={classes.center}>
                 <div className={classes.icon} >
                     {
-                        // disabled ? <MicrophoneOffIcon className={classes.disabledColor} /> : <MicrophoneIcon className={classIcon} />
+                        // isListening && <MicrophoneOffIcon className={classes.disabledColor} />
                     }
                 </div>
                 {

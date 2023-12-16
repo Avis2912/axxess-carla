@@ -119,12 +119,16 @@
     z-index: 1000;  
     opacity: 1;
     /* pointer-events: none; */
-    transition: all 1.5s ease-in;
+    transition: opacity 1.5s ease-in;
 
     display: flex;
     /* flex-direction: column; Align children vertically */
     /* align-items: center; */
     justify-content: center;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 0px;
+    border-radius: 0px;
 
     
 }

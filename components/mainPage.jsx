@@ -100,6 +100,9 @@ export default function MainPage() {
     const [response, setResponse] = React.useState("")
     const [micMessage, setMicMessage] = React.useState("")
 
+    const [isListening, setIsListening] = React.useState(false);
+
+
 
     React.useEffect(() => {
         
@@ -363,6 +366,8 @@ export default function MainPage() {
         
         setSendCount((prev) => prev + 1)
 
+        console.log('stop');
+        // setIsListening(false)
         sendData(name, datetime, file)
 
     }
@@ -445,6 +450,8 @@ export default function MainPage() {
     const handleStart = () => {
 
         console.log('RUNNINGGGGGGGGG');
+
+        setIsListening(true);
 
         if(startRef.current === startStates.default) {
 
@@ -596,6 +603,7 @@ export default function MainPage() {
                 onResponses={handleResponses}
                 onTranscripts={handleTranscripts}
                 onPermission={getMicPermission}
+                isListening={isListening}
                 />
             </div>
             {
