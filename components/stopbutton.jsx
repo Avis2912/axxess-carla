@@ -79,6 +79,7 @@ function StopButton({
       </div>
 
          <div className={classes.tap} style={{opacity: showPopup && '0'}}>
+         Works on PC! <br />
          {isListening ? 'Speak Normally' : 'Tap Anywhere'}
          </div>
          </>
