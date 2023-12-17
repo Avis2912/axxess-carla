@@ -90,40 +90,55 @@ export default function signin() {
   width: '100%', 
   backgroundColor: 'transparent',
   position: 'absolute', 
-  marginTop: '530px',
+  marginTop: '515px',
   display: 'flex', 
   flexDirection: 'row', 
   flexWrap: 'wrap',
   justifyContent: 'center', 
   alignItems: 'center'
 }}>
-  <div style={{
-    height: '250px', 
-    width: '350px', 
-    backgroundColor: 'white',
+  <img 
+  src='https://i.postimg.cc/g0DWkPcs/Screenshot-2023-12-17-at-12-32-42-AM.png'
+  style={{
+    height: '280px', 
+    width: '320px', 
+    // backgroundColor: 'white',
+    borderRadius: '14px',
+    margin: '5px',
+    '@media (max-width: 600px)': {
+      margin: '15px auto'
+    }
+  }}>
+  </img>
+
+  <img 
+  src='https://i.postimg.cc/MHHkZsdF/Screenshot-2023-12-17-at-12-50-24-AM.png'
+  style={{
+    height: '280px', 
+    width: '320px', 
+    // backgroundColor: 'white',
     borderRadius: '14px',
     margin: '15px',
     '@media (max-width: 600px)': {
       margin: '15px auto'
     }
   }}>
-  </div>
-
-  <div style={{
-    height: '250px', 
-    width: '350px', 
-    backgroundColor: 'white',
-    borderRadius: '14px',
-    margin: '15px',
-    '@media (max-width: 600px)': {
-      margin: '15px auto'
-    }
-  }}>
-  </div>
+  </img>
 
     </div>
 
-
     </div>
+    {/* <div style={{height: '55px', width: '100vw', position: 'relative', backgroundColor: 'white',
+      display: 'flex', alignItems: 'center', padding: '20px', justifyContent: 'space-between',
+      backgroundColor: '#FFE6D4', borderStyle: 'dotted', borderBottomWidth: '0.0px', borderColor: 'brown',
+      borderRightWidth: '0px', borderTopWidth: '0px', borderLeftWidth: '0px', marginTop: '100px'}}>
+        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}><img src="https://i.postimg.cc/T1LRJn9W/decentral-21-removebg-preview.png" 
+        style={{color: 'rgb(119, 85, 59)', height: '24px', width: '24px', paddingTop: '0px'}}></img>
+        <p style={{color: 'rgb(119, 85, 59)', fontSize: '20px', fontFamily: 'serif', marginLeft: '4px',}}
+        onClick={()=>{router.push('/')}}>Carla</p></div>
+        <p style={{color: 'rgb(119, 85, 59)', fontSize: '20px', fontFamily: 'serif', }}
+        onClick={()=>{router.push('/mission')}}>Mission</p>
+      </div> */}
     </div>
+    
 }

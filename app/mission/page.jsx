@@ -69,12 +69,12 @@ export default function signin({ params }) {
   };
 
   const handleSubmit = () => {
-    router.push(`/`);
+    router.push(`/landing`);
   }
 
   const agree = () => {
-    setSelectedOption('Agree');
-    setIsButtonDisabled(false);
+    router.push(`https://www.mentalhealthfirstaid.org/mental-health-resources/`);
+
   }
 
     return <>
@@ -103,30 +103,37 @@ export default function signin({ params }) {
     
     <div className={classes.holder}>
 
-    <img src="https://i.postimg.cc/tCc8ZPnS/undraw-Romantic-getaway-re-3f45-removebg-preview.png" alt="NAHH" 
+    <img src="https://i.postimg.cc/tCc8ZPnS/undraw-Romantic-getaway-re-3f45-removebg-preview.png" alt="oops" 
     style={{height: '200px', width: '255px', zIndex: 1000, 
     marginBottom: '30px',}}/>
 
     <div className={classes.text} >
-    Carla Is Not <br></br>
-    A Substitute
+    Carla Exists To<br></br>
+    Democratize
     
     </div>
 
     <div className={classes.text2} >
-    If at any point I experience the<br/>
-    need to speak to a real person,<br/>
-    I'll get professional help ASAP.
+    Carla's primary mission is to<br/>
+    provide safe, affordable mental <br/>
+    health help to everyone that <br/>
+    needs it. To do this, we work <br/>
+    on bringing our fixed AI costs<br />
+    down and building a therepeautic <br />
+    & safe channel for exploring <br/>
+    mental health needs privately. <br />
+    Note that Carla is NOT a <br />
+    substitute for real therapy.
     </div>
 
     <button 
     className={`${classes.button50} ${selectedOption === 'Agree' ? classes.active : ''}`}
     onClick={() => agree()}
-    > I Agree
+    > Seek Real Help
     </button>
     
-    <button className={classes.button} onClick={handleSubmit} disabled={isButtonDisabled}>
-    💬 Message Carla!
+    <button className={classes.button} onClick={handleSubmit} >
+    💬 Message Carla
     </button>
         
     </div>

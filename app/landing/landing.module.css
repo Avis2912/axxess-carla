@@ -1,5 +1,5 @@
 .container {
-    height: 1000px;
+    height: 1150px;
     width: 100wh;
     background-color: #FFE6D4;/*fffae6*/
     display: flex;
@@ -139,10 +139,4 @@
 
 }
 
-.feature {
-    position: 'absolute';
-    height: '200px';
-    width: '300px';
-    background-color: 'white';
-    /* margin-top: 300px; */
-}
+

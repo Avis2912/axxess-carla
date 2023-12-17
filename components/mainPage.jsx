@@ -101,6 +101,7 @@ export default function MainPage() {
     const [micMessage, setMicMessage] = React.useState("")
 
     const [isListening, setIsListening] = React.useState(false);
+    const [mainPopup, setMainPopup] = React.useState(false);
 
 
 
@@ -604,6 +605,7 @@ export default function MainPage() {
                 onTranscripts={handleTranscripts}
                 onPermission={getMicPermission}
                 isListening={isListening}
+                mainPopup={mainPopup}
                 />
             </div>
             {

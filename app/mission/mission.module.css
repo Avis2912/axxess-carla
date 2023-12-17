@@ -1,5 +1,5 @@
 .container {
-    height: 120dvh;
+    height: 135dvh;
     width: 100wh;
     background-color: #FFE6D4;/*fffae6*/
     display: flex;
@@ -40,7 +40,7 @@
     opacity: 0.8;
 
     line-height: 1.15; /* Adjust this value as needed */
-    margin-bottom: 50px;
+    margin-bottom: 130px;
     letter-spacing: -0.4px; 
 
 
@@ -64,7 +64,7 @@
     opacity: 0.8;
 
     line-height: 1.45;
-    margin-bottom: 36px;
+    margin-bottom: 116px;
     letter-spacing: -0.25px; 
     
 }
