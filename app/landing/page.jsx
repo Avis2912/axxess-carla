@@ -81,7 +81,7 @@ export default function signin() {
     style={{'@media (max-width: 600px)': {
       backgroundColor: 'red'
     }}}>
-    💬 Message Carla 
+    💬 Text Carla
     </button>
         
     </div>

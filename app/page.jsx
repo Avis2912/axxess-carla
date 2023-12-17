@@ -3,16 +3,16 @@ import MainPage from '../components/mainPage'
 
 
 export const metadata = {
-    title: 'Whisper API Sample App',
-    description: 'A sample webapp for transcribing speech using OpenAI Speech to Text API based on Whisper',
+    title: 'Carla AI',
+    description: 'The modern therapy companion',
     viewport: 'maximum-scale=1.0, minimum-scale=1.0, initial-scale=1.0, width=device-width, user-scalable=0',
     icons: {
-        icon: '/logo192.png',
-        shortcut: '/logo192.png',
-        apple: '/logo192.png',
+        icon: '/logo.png',
+        shortcut: '/logo.png',
+        apple: '/logo.png',
         other: {
             rel: 'apple-touch-icon-precomposed',
-            url: '/logo192.png',
+            url: '/logo.png',
         }
     }
 }
