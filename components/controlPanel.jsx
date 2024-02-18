@@ -358,7 +358,7 @@ async function callMe() {
         body: JSON.stringify({
             body: "this is an sos message for my lovly Avi ", // The message body
             from: "+18339562138", // The sender's phone number
-            to: "+16576427241",   // The recipient's phone number
+            to: "+15128010784",   // The recipient's phone number
         }),
     });
 
