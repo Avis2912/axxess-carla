@@ -124,6 +124,7 @@ export default function ControlPanel({
             
             if (userData && userData.fallen) {
                 console.log("FELL");
+                await sendMessageToFirestore("Nancy just sent an SOS signal. Reach out to her ASAP & make sure she's safe.");
                 await handleTextToSpeech("Nancy, are you okay? I'm about to send a message to your nurse and family members to check on you, but you can tell me if this is a false alarm.")
                 clearInterval(intervalId); // Stop the interval
             } else { console.log("Nancy is fine.");}
@@ -408,7 +409,7 @@ const fetchGptResponse = async (atext) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer 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`
+                'Authorization': `Bearer process.env.OPENAI_APIKEY`
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
@@ -553,7 +554,7 @@ const fetchGptResponse = async (atext) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer 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`
+                'Authorization': `Bearer ${process.env.OPENAI_APIKEY}`
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo-1106",

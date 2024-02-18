@@ -96,7 +96,7 @@ export default function Response({
     //             method: 'POST',
     //             headers: {
     //                 'Content-Type': 'application/json',
-    //                 'Authorization': `Bearer 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`
+    //                 'Authorization': `Bearer process.env.OPENAI_APIKEY`
     //             },
     //             body: JSON.stringify({
     //                 model: "gpt-3.5-turbo",
