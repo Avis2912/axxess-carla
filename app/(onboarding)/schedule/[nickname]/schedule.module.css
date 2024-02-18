@@ -136,6 +136,8 @@
 /* CSS */
 .button50 {
   appearance: button;
+  width: 100%;
+
   background-color: #ffcda3;
   background-image: none;
   border: 0px solid #3e3e3e;
@@ -149,9 +151,9 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
-  margin: 0 5px 10px 0;
+  /* margin: 0 5px 10px 0; */
   overflow: visible;
-  padding: 12px 40px;
+  /* padding: 12px 40px; */
   text-align: center;
   text-transform: none;
   touch-action: manipulation;

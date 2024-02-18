@@ -12,7 +12,7 @@
 .main {
     /*background-color: #eef;*/
     position: relative;
-    height: calc(100% - 65px);
+    height: calc(100% - 28px);
     z-index: 1;
     overflow-y: auto;
     
@@ -39,14 +39,30 @@
 
 .control {
 
-    background-color: white;
+    background-color: #FFE6D4;
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 70px;
+    height: 28px;
     z-index: 2;
     box-shadow: none;
     align-items: end;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
+
+}
+
+.control2 {
+
+    background-color: #FFE6D4;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 28px;
+    z-index: 2;
+    box-shadow: none;
+    align-items: end;
+    margin-bottom: 10px;
+
 }

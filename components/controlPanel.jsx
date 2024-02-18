@@ -462,19 +462,19 @@ const fetchGptResponse = async (atext) => {
                 console.log(func);
             }
 
-            if(functionCallName === "use_SOS") {
-                console.log('SOS');
-                alert('RAN SOS');
-            }
+            // if(functionCallName === "use_SOS") {
+            //     console.log('SOS');
+            //     alert('RAN SOS');
+            // }
 
-            if(functionCallName === "user_falls") {
-                console.log('SOS2');
-                alert('RAN SOS2');
-            }
-            if(functionCallName === "ask_external_help") {
-                console.log('SOS3');
-                alert('RAN SOS3');
-            }
+            // if(functionCallName === "user_falls") {
+            //     console.log('SOS2');
+            //     alert('RAN SOS2');
+            // }
+            // if(functionCallName === "ask_external_help") {
+            //     console.log('SOS3');
+            //     alert('RAN SOS3');
+            // }
 
             if(functionCallName === "ask_external_help" || "user_falls" || "use_SOS") {
                 await sendMessageToFirestore("Nancy just sent an SOS signal. Reach out to her ASAP & make sure she's safe.");
