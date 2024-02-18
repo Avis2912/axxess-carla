@@ -6,6 +6,7 @@ import chatBubble from '@iconify-icons/ion/chatbubble';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { app } from '/firebaseConfig'; // Importing the Firebase app instance
 import { useEffect, useState } from 'react';
+import Navbar from '../../../../components/topbar';
 
 export default function signin({ params }) {
   const router = useRouter();
@@ -55,7 +56,10 @@ export default function signin({ params }) {
   }
 
   return (
+    <div>
+    <Navbar currentPath={"meds/hey"} />
     <div className={classes.container}>
+      
       <div className={classes.holder}>
         <div className={classes.text}>
           Meds <br></br>
@@ -97,6 +101,7 @@ export default function signin({ params }) {
           Add New Meds
         </button>
       </div>
+    </div>
     </div>
   );
 }

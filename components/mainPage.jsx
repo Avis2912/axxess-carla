@@ -4,10 +4,12 @@ import React from 'react'
 import { createPortal } from 'react-dom'
 
 import classes from './mainPage.module.css'
+import Navbar from '../components/topbar';
 
 import { startStates } from './startbutton'
 
 import ControlPanel from './controlPanel'
+import TopPanel from './topPanel'
 import Dialog from './dialog'
 import SnackBar from './snackbar'
 import AudioModal from './audiomodal'
@@ -623,6 +625,27 @@ export default function MainPage() {
                 mainPopup={mainPopup}
                 />
             </div>
+
+            <div className={classes.control2}>
+                <TopPanel
+                state={startState}
+                isSignalOn={sendCount > 0}
+                isRecording={isRecording}
+                disabled={!isReady}
+                disabledSetting={!isReady || startState === startStates.active}
+                onMicClick={handleStart}
+                micText={micMessage}
+                onInput={handleTextInput}
+                onSettingsClick={handleOpenSettings}
+                onResponse={handleResponse}
+                onResponses={handleResponses}
+                onTranscripts={handleTranscripts}
+                onPermission={getMicPermission}
+                isListening={isListening}
+                mainPopup={mainPopup}
+                />
+            </div>
+
             {
                 openSettings && createPortal(
                     <Dialog onClose={handleCloseSettings} />,

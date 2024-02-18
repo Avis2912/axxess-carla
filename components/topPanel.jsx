@@ -11,7 +11,7 @@ import MenuButton from './menubutton'
 import Menu from './menu'
 
 import { useRouter } from 'next/navigation'
-
+import Navbar from '../components/topbar';
 
 const axios = require('axios');
 
@@ -113,29 +113,6 @@ export default function ControlPanel({
             return () => clearInterval(intervalId);
         }
     }, [showPopup]);
-
-    React.useEffect(() => {
-        let intervalId;  
-        const fetchData = async () => {
-            // await handleTextToSpeech("Nancy, are you okay? I'm about to send a message to your nurse and family members to check on you, but you can tell me if this is a false alarm.")
-            const userDocRef = doc(db, "meds", "status");
-            const userDocSnapshot = await getDoc(userDocRef);
-            const userData = userDocSnapshot.data();
-            
-            if (userData && userData.fallen) {
-                console.log("FELL");
-                await handleTextToSpeech("Nancy, are you okay? I'm about to send a message to your nurse and family members to check on you, but you can tell me if this is a false alarm.")
-                clearInterval(intervalId); // Stop the interval
-            } else { console.log("Nancy is fine.");}
-        };  
-        intervalId = setInterval(fetchData, 5000); // Run the fetchData function every 5 seconds
-    
-        fetchData(); // Run the fetchData function immediately upon mounting
-    
-        return () => clearInterval(intervalId); // Clean up by clearing the interval when the component unmounts
-    }, []);
-    
-
     
 
     const updateCounter = async () => {
@@ -356,10 +333,6 @@ const use_arxiv = async (scientific_subject="blueberry") => {
     return response
 }
 
-// const make_nurse_appointment = async (time, date) => {
-
-// }
-
 const sendMessageToFirestore = async (body) => {
     try {
         // Reference to the 'messages' collection
@@ -383,7 +356,7 @@ async function callMe() {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            body: "Nancy is on the ground. She needs help ASAP. ", // The message body
+            body: "this is an sos message for my lovly Avi ", // The message body
             from: "+18339562138", // The sender's phone number
             to: "+15128010784",   // The recipient's phone number
         }),
@@ -432,25 +405,6 @@ const fetchGptResponse = async (atext) => {
                     }
                     },
                     {
-                        name: "make_nurse_appointment",
-                        description: "To make nurse appointments",
-                        parameters: {
-                            type: "object", 
-                            properties: {
-                                time: {
-                                    type: "string", 
-                                    description: "The time & Nurse for the appointment. Example: `11AM Nurse Mary Visit`. Assume Nurse Mary if no nurse mentioned. "
-                                },
-                                date: {
-                                    type: "string", 
-                                    description: "The date for the appointment. If the prompt says `Today` or `Tomorrow`, keep it as that. Otherwise for dates like 19, 20, 21 keep it as `19th`, `20th`, `21st` etc."
-                                }
-                            },
-
-                            required: ["date", "time"]
-                        }
-                    },
-                    {
                         name: "use_SOS",
                         description: "for when user says they've fallen over or asks for external help or says SOS",
                         parameters: {
@@ -494,7 +448,6 @@ const fetchGptResponse = async (atext) => {
         const data = await response.json();
 
 
-
         const completionResponse = data.choices[0].message;
 
         let func = ""
@@ -509,37 +462,19 @@ const fetchGptResponse = async (atext) => {
                 console.log(func);
             }
 
-            if (functionCallName === "make_nurse_appointment") {
-                alert('ran call');
-                const completionArguments = JSON.parse(completionResponse.function_call.arguments);
-                console.log("completionArguments: ", completionArguments);
-
-                console.log('TIME:' + completionArguments.time);
-                
-                const date = completionArguments.date ? completionArguments.date : "Today";
-                const time = completionArguments.time ? completionArguments.time : "11AM Nurse Mary Visit";
-
-                
-                const userDocRef = doc(db, "vists", "vists");
-                const userDocSnapshot = await getDoc(userDocRef);
-                const userData = userDocSnapshot.data();
-                
-                // Check if an array exists for the specified date in userData
-                if (userData[date]) {
-                    // Append the time string to the existing array
-                    userData[date].push(time);
-                } else {
-                    // Create a new array with the date as the title and add the time string inside it
-                    userData[date] = [time];
-                }
-                
-                // Update the document in Firestore with the updated userData
-                await updateDoc(userDocRef, userData);
+            if(functionCallName === "use_SOS") {
+                console.log('SOS');
+                alert('RAN SOS');
             }
-            
-            
 
-       
+            if(functionCallName === "user_falls") {
+                console.log('SOS2');
+                alert('RAN SOS2');
+            }
+            if(functionCallName === "ask_external_help") {
+                console.log('SOS3');
+                alert('RAN SOS3');
+            }
 
             if(functionCallName === "ask_external_help" || "user_falls" || "use_SOS") {
                 await sendMessageToFirestore("Nancy just sent an SOS signal. Reach out to her ASAP & make sure she's safe.");
@@ -561,7 +496,6 @@ const fetchGptResponse = async (atext) => {
                 ${completionResponse.function_call.name == "use_arxiv" && "Respond with the appropriate papers"}
                 ${completionResponse.function_call.name == "user_falls" || "external_help" || "use_SOS" && "Respond by saying you have texted my nurse and family, & to hang tight."}
                 ${completionResponse.function_call.name == "false_alarm" && "Respond by saying you have texted my contacts confirming you are actually okay"}
-                ${completionResponse.function_call.name == "make_nurse_appointment" && "Respond by saying you have updated my appointments"}
                  ` },
                 ...context,
                 { "role": "function",
@@ -660,96 +594,12 @@ const fetchGptResponse = async (atext) => {
 
     return (
         <>
-        <div
-        className={`${showPopup ? classes.popup : classes.popupClose}`}
-        style={{borderColor: isListening && '#FFE6D4', borderRadius: isListening && '12px'
-    }}
-        >  
-            <StartButton2
-        disabled={disabled}
-        isRecording={isRecording}
-        state={state}
-        showPopup={!showPopup} 
-        onClick={disabled ? () => {} : onMicClick}
-        isListening={isListening}
-        />
 
-        {/* <img src="https://i.ibb.co/GQL1GbL/Screenshot-2023-12-05-at-4-01-21-PM-removebg-preview.png" 
-        alt="C" className={classes.carla}></img>   
-         */}
-
-
-        <StopButton
-        disabled={disabled}
-        isRecording={isRecording}
-        state={state}
-        showPopup={!showPopup} 
-        onClick={callPopup}
-        isListening={isListening}
-        />
-          </div>
-
-
-
-        <div className={classes.container}>
-
-            <div className={classes.center}>
-            
-            <input 
-            placeholder="Message Carla" 
-            className={classes.input}
-            value={isText ? inputText : 'Weekly Limit Hit'}
-            onChange={handleInputChange}
-            onKeyDown={isText ? handleInputEnter : ()=>{}}
-            style={{ opacity: showPopup && '0', backgroundColor: !isText && '#E5B999'}}  // Conditionally set the width
-            />
-
-                <StartButton 
-                disabled={disabled}
-                isRecording={isRecording}
-                state={state}
-                onClick={isAudio ? callPopup : () => {alert('Weekly Call Limit Hit')}}
-                showPopup={showPopup}  // Conditionally set the width
-                // onClick={disabled ? () => {} : onMicClick}
-                />
-
-                <MenuButton 
-                disabled={disabled}
-                isRecording={isRecording}
-                state={state}
-                // onClick={callPopup}
-                showPopup={showPopup}  // Conditionally set the width
-                // onClick={disabled ? () => {} : onMicClick}
-                />
-
-                {/* <Menu /> */}
-
-               
-                <div className={classes.item}>
-                    {/* {
-                        disabledSetting &&
-                        <div className={disabledSetting ? classes.disabledButton : classes.iconButton}>
-                            <SettingsIcon color={disabledSetting ? '#E6E6E6' : '#656565' } />
-                        </div>
-                    } */}
-                    {/* {
-                        !disabledSetting &&
-                        <div className={disabledSetting ? classes.disabledButton : classes.disabledButton} onClick={disabledSetting ? () => {} : onSettingsClick}>
-                        <img src="https://i.ibb.co/GQL1GbL/Screenshot-2023-12-05-at-4-01-21-PM-removebg-preview.png" 
-                        alt="C" className={classes.pic}></img>                          </div>
-                    } */}
-                </div>
-
-            </div>
-            <div className={classes.bottom}>
-                {/* <div className={classes.item}>
-                    <div className={classes.iconPanel}>
-                        <SignalIcon color={isSignalOn ? '#00D8FF' : '#E6E6E6'} />
-                    </div>
-                </div> */}
-               
-            </div>
+        <div className=''>
+          <Navbar currentPath={"medications"} />
         </div>
+
+ 
         </>
     )
 }

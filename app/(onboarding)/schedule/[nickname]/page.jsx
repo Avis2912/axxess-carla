@@ -5,6 +5,7 @@ import classes from './schedule.module.css';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { app } from '/firebaseConfig'; // Importing the Firebase app instance
 import { useEffect, useState } from 'react';
+import Navbar from '../../../../components/topbar';
 
 export default function signin({ params }) {
   const router = useRouter();
@@ -48,6 +49,8 @@ export default function signin({ params }) {
   const sortedDates = ['Today', 'Tomorrow', '20th', '21st', '22nd', '23rd'];
 
   return (
+    <div>
+    <Navbar currentPath={"meds/hey"} />
     <div className={classes.container}>
       <div className={classes.holder}>
         {sortedDates.map(date => (
@@ -67,6 +70,7 @@ export default function signin({ params }) {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 }
