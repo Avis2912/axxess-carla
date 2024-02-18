@@ -17,7 +17,7 @@ const axios = require('axios');
 
 import dotenv from "dotenv";
 
-import { getFirestore, doc, setDoc, getDoc, collection, updateDoc, arrayUnion } from 'firebase/firestore';
+import { getFirestore, doc, addDoc, docRef, setDoc, getDoc, collection, updateDoc, arrayUnion } from 'firebase/firestore';
 
 import { app } from '../firebaseConfig';
 import { auth } from '/firebaseConfig.js';
@@ -333,6 +333,38 @@ const use_arxiv = async (scientific_subject="blueberry") => {
     return response
 }
 
+const sendMessageToFirestore = async (body) => {
+    try {
+        // Reference to the 'messages' collection
+        const messagesRef = collection(db, "messages");
+        // Add a new document with a generated ID
+        await addDoc(messagesRef, {
+            to: "+15128010784",
+            from: "+18339562138",
+            body: body,
+        });
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+};
+
+async function callMe() {
+    const response = await fetch('/api/call', { // Make sure to use the correct path where your API is accessible
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            body: "this is an sos message for my lovly Avi ", // The message body
+            from: "+18339562138", // The sender's phone number
+            to: "+16576427241",   // The recipient's phone number
+        }),
+    });
+
+    const data = await response.json(); // Assuming API responds with JSON
+    return data; // Contains the API response, including success status and message
+}
 
 const fetchGptResponse = async (atext) => {
         if (!atext) return; // Add this check
@@ -443,6 +475,12 @@ const fetchGptResponse = async (atext) => {
                 console.log('SOS3');
                 alert('RAN SOS3');
             }
+
+            if(functionCallName === "ask_external_help" || "user_falls" || "use_SOS") {
+                await sendMessageToFirestore("Nancy just sent an SOS signal. Reach out to her ASAP & make sure she's safe.");
+                callMe();
+            }
+
         }
 
         if (!completionResponse.content) { 
@@ -455,8 +493,9 @@ const fetchGptResponse = async (atext) => {
             body: JSON.stringify({
                 model: "gpt-3.5-turbo-1106",
                 messages: [{ "role": "system", "content": `You're Carla, my personal AI assistant. Do the things I say perfectly:
-                ${completionResponse.function_call.name == "use_arxiv" ? "Respond with the appropriate papers"
-                : "Respond by saying you have emailed my nurse and family, & to hang tight."}
+                ${completionResponse.function_call.name == "use_arxiv" && "Respond with the appropriate papers"}
+                ${completionResponse.function_call.name == "user_falls" || "external_help" || "use_SOS" && "Respond by saying you have texted my nurse and family, & to hang tight."}
+                ${completionResponse.function_call.name == "false_alarm" && "Respond by saying you have texted my contacts confirming you are actually okay"}
                  ` },
                 ...context,
                 { "role": "function",
