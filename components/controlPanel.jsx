@@ -338,7 +338,7 @@ const fetchGptResponse = async (atext) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.OPENAI_APIKEY}`
+                'Authorization': `Bearer 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`
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",

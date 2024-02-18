@@ -24,7 +24,7 @@ export async function POST(req) {
         const apiResponse = await fetch('https://whisper-docker-3eayvxgjqa-uc.a.run.app/transcribe', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.CLOUD_RUN_API_KEY}` },
+            'Authorization': 'Bearer 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' },
             body: JSON.stringify({ audio: base64Audio })
         });
 
