@@ -338,11 +338,11 @@ const fetchGptResponse = async (atext) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer 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`
+                'Authorization': `Bearer ${process.env.OPENAI_APIKEY}`
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: [{ "role": "system", "content": `You're Carla, my 10yo CBT AI therapist. DONT mention professional help. ALWAYS respond in 10-20 words w/ occasional questions & 1 tip. Don't repeat problem back to me. ${aboutMe ? `ABOUT ME: ${aboutMe}` : '' }` },
+                messages: [{ "role": "system", "content": `You're Carla, my personal homecare assistant by Axxess. DONT mention professional help. ALWAYS respond in brief words w/ occasional questions & 1 tip. Don't repeat problem back to me.` },
                 ...context,
                 { "role": "user", "content": modifiedText }],
                 temperature: 1 // Setting maximum temperature

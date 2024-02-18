@@ -2,7 +2,9 @@
 import openaiService from '/services/openaiService';
 
 export async function POST(request) {
+
   try {
+    console.log ('hey from textToSpeech route 1');
     const { text } = await request.json();
     const audioFilePath = await openaiService.textToSpeech(text);
     console.log("Sending response:", JSON.stringify({ audioFilePath }));
