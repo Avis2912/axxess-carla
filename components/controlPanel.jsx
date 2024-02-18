@@ -71,7 +71,7 @@ export default function ControlPanel({
 
     const [seconds, setSeconds] = React.useState(0)
     const [weeklyAudioCounter, setWeeklyAudioCounter] = React.useState(0)
-    const [weeklyAudioLimit, setWeeklyAudioLimit] = React.useState(5)
+    const [weeklyAudioLimit, setWeeklyAudioLimit] = React.useState(50)
 
     const [dailyAudioCounter, setDailyAudioCounter] = React.useState(0)
     const [dailyAudioLimit, setDailyAudioLimit] = React.useState(30)
@@ -141,6 +141,9 @@ export default function ControlPanel({
     const contextLength = 3;
 
     const handleNewInteraction = (newPrompt, newResponse) => {
+
+        if (!newResponse) {return};
+
         // Add new prompt and response to history
         const updatedHistory = [...conversationHistory, { prompt: newPrompt, response: newResponse }];
 
@@ -323,6 +326,14 @@ const getMicPermission = () => {
     }
 }
 
+const use_arxiv = async (scientific_subject="blueberry") => {
+    const hi = await axios.get(`http://export.arxiv.org/api/query?search_query=${scientific_subject}&start=0&max_results=10`);
+    console.log(hi.data);
+    const response = hi.data;
+    return response
+}
+
+
 const fetchGptResponse = async (atext) => {
         if (!atext) return; // Add this check
         setTranscripts([...transcripts, atext]);
@@ -342,22 +353,139 @@ const fetchGptResponse = async (atext) => {
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: [{ "role": "system", "content": `You're Carla, my personal homecare assistant by Axxess. DONT mention professional help. ALWAYS respond in brief words w/ occasional questions & 1 tip. Don't repeat problem back to me.` },
+                messages: [{ "role": "system", "content": `You're Carla, my personal homecare assistant by Axxess. DONT mention professional help. Respond in brief w/ occasional questions. Don't repeat problem back to me.` },
                 ...context,
                 { "role": "user", "content": modifiedText }],
-                temperature: 1 // Setting maximum temperature
-
+                temperature: 0.3,
+                functions: [
+                    {
+                    name: "use_arxiv",
+                    description: "get research papers",
+                    parameters: {
+                        type: "object", 
+                        properties: {
+                            scientific_subject: {
+                                type: "string", 
+                                description: "The scientific topic to be queried for."
+                            }
+                        },
+                        required: ["scientific_subject"] 
+                    }
+                    },
+                    {
+                        name: "use_SOS",
+                        description: "for when user says they've fallen over or asks for external help or says SOS",
+                        parameters: {
+                            type: "object", 
+                            properties: {
+                                user_struggle: {
+                                    type: "string", 
+                                    description: "The user's struggle."
+                                }
+                            },
+                        }
+                    },
+                    {
+                        name: "user_falls",
+                        description: "for when user says they've fallen over",
+                        parameters: {
+                            type: "object", 
+                            properties: {
+                            },
+                        }
+                    },
+                    {
+                        name: "ask_external_help",
+                        description: "for when user asks for external help",
+                        parameters: {
+                            type: "object", 
+                            properties: {
+                            },
+                        }
+                    },
+                ],
+                function_call: "auto",
             })
         });
 
         if (!response.ok) {
-            // Log the error for debugging
             console.error('API request failed: ', response.statusText);
             return;
         }
 
         const data = await response.json();
+
+
+        const completionResponse = data.choices[0].message;
+
+        let func = ""
+        if(!completionResponse.content) { //means wants to use function
+            const functionCallName = completionResponse.function_call.name;
+            console.log("functionCallName: ", functionCallName);
+
+            if(functionCallName === "use_arxiv") {
+                const completionArguments = JSON.parse(completionResponse.function_call.arguments);
+                console.log("completionArguments: ", completionArguments);
+                func = await use_arxiv(completionArguments.scientific_subject)
+                console.log(func);
+            }
+
+            if(functionCallName === "use_SOS") {
+                console.log('SOS');
+                alert('RAN SOS');
+            }
+
+            if(functionCallName === "user_falls") {
+                console.log('SOS2');
+                alert('RAN SOS2');
+            }
+            if(functionCallName === "ask_external_help") {
+                console.log('SOS3');
+                alert('RAN SOS3');
+            }
+        }
+
+        if (!completionResponse.content) { 
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer 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`
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo-1106",
+                messages: [{ "role": "system", "content": `You're Carla, my personal AI assistant. Do the things I say perfectly:
+                ${completionResponse.function_call.name == "use_arxiv" ? "Respond with the appropriate papers"
+                : "Respond by saying you have emailed my nurse and family, & to hang tight."}
+                 ` },
+                ...context,
+                { "role": "function",
+                  "name": completionResponse.function_call.name,
+                  "content": func }],
+                temperature: 0.3,
+            })
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        //same stuff for func calling (not ideal but works)
+
         if (data.choices && data.choices.length > 0) {
+            if (!data.choices[0].message.content) {return};
+            onResponse(data.choices[0].message.content);
+            setResponses([...responses, data.choices[0].message.content]);
+            addCarlaMessage(data.choices[0].message.content);
+            handleNewInteraction(modifiedText, data.choices[0].message.content);
+
+        } else {
+            console.error('Invalid response structure:', data);
+        }
+            
+        };
+
+        if (data.choices && data.choices.length > 0) {
+            if (!data.choices[0].message.content) {return};
             // await setGptResponse(data.choices[0].message.content);
             onResponse(data.choices[0].message.content);
             setResponses([...responses, data.choices[0].message.content]);

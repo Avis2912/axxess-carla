@@ -407,10 +407,9 @@ export default function MainPage() {
     
             if(!response.ok) {
                 
-                /**
-                 * I am assuming that all 500 errors will be caused by
-                 * problem in accessing the remote API endpoint for simplicity.
-                 */
+                /* I am assuming that all 500 errors will be caused by
+                   problem in accessing the remote API endpoint for simplicity. */
+
                 if(response.status === 500) {
                     console.log('error');
                     setOpenSnack(true)
@@ -422,6 +421,9 @@ export default function MainPage() {
             const resultObject = JSON.parse(resultString);
 
             const result = resultObject.data;
+
+            
+            
             console.log(result);
 
             setSendCount((prev) => prev - 1)
@@ -431,7 +433,20 @@ export default function MainPage() {
             if(result) {
 
 
-                    setMicMessage(result);
+                const carlaIndex = result.toLowerCase().indexOf("carla");
+                if (carlaIndex !== -1) {
+                    console.log('LISTENING NOW.');
+                    const messageAfterCarla = result.substring(carlaIndex).trim(); // Add 5 to skip "carla" or "Carla"
+                    setMicMessage(messageAfterCarla);
+                }
+
+                const carlaIndex2 = result.toLowerCase().indexOf("Carla");
+                if (carlaIndex2 !== -1) {
+                    console.log('LISTENING NOW.');
+                    const messageAfterCarla = result.substring(carlaIndex2).trim(); // Add 5 to skip "carla" or "Carla"
+                    setMicMessage(messageAfterCarla);
+                }
+                
                     // addDataItems(result);
 
                 }
